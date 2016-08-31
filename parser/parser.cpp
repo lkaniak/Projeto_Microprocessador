@@ -228,7 +228,7 @@ std::vector<std::string> Parser::split_line(const std::string &text, char sep) {
 void Parser::load_instructions()
 {
     std::ifstream symbols_file;
-    symbols_file.open("./data/symbols.d");
+    symbols_file.open("../data/symbols.d");
     
     if (!symbols_file.is_open())
         throw std::runtime_error("Failed to open symbols file.");
@@ -247,7 +247,7 @@ void Parser::load_instructions()
 void Parser::load_operators()
 {
     std::ifstream op_file;
-    op_file.open("./data/operator.d");
+    op_file.open("../data/operator.d");
     
     if (!op_file.is_open())
         throw std::runtime_error("Failed to open operator file.");
