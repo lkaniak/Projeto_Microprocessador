@@ -6,7 +6,7 @@
  * Created on August 28, 2016, 10:15 AM
  */
 
-#include "parser.h"
+#include "./parser/parser.h"
 #include <fstream>
 
 int main(int argc, char** argv)
