@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   parser.cpp
  * Author: toad
@@ -11,8 +5,17 @@
  * Created on August 28, 2016, 10:19 AM
  */
 
+#ifdef _WIN32
+#define instructions_file "./data/symbols.d"
+#define operators_file "./data/operator.d"
+#define build_file "./build/temp.obj"
+
+#else // UNIX
 #define instructions_file "../data/symbols.d"
 #define operators_file "../data/operator.d"
+#define build_file "../build/temp.obj"
+
+#endif 
 
 #include "parser.h"
 Parser *Parser::instancia = nullptr;
@@ -75,7 +78,7 @@ void Parser::load_operators()
 	std::cout << "Done." << std::endl;
 }
 
-std::vector<std::string> Parser::split_line(const std::string &text, char sep) {
+std::vector<std::string> Parser::split_line(const std::string &text, const char sep) {
     std::vector<std::string> tokens;
     std::size_t start = 0, end = 0;
     while ((end = text.find(sep, start)) != std::string::npos) {
@@ -88,12 +91,12 @@ std::vector<std::string> Parser::split_line(const std::string &text, char sep) {
     return tokens;
 }
 
-std::string Parser::dec_to_bin(int dec_num)
+std::string Parser::dec_to_bin(const int dec_num)
 {
 	return std::bitset<8>(dec_num).to_string();
 }
 
-std::string Parser::get_instruction_opcode(std::string op)
+std::string Parser::get_instruction_opcode(const std::string op)
 {
 	std::string op_bin;
 	
@@ -121,7 +124,7 @@ std::string Parser::get_instruction_opcode(std::string op)
 	return std::string();
 }
 
-std::string Parser::get_symbol_opcode(std::string op)
+std::string Parser::get_symbol_opcode(const std::string op)
 {
 	for (auto it = this->symbol_table.begin(); it != this->symbol_table.end(); it++)
 		if (it->first == op)
@@ -129,7 +132,7 @@ std::string Parser::get_symbol_opcode(std::string op)
 	return std::string();
 }
 
-bool Parser::is_operator(std::string op)
+bool Parser::is_operator(const std::string op)
 {
     for (auto it = this->operators.begin(); it != this->operators.end(); it++)
         if (it->first == op)
@@ -137,7 +140,7 @@ bool Parser::is_operator(std::string op)
     return false;
 }
 
-bool Parser::is_valid_symbol(std::string si, int num_op)
+bool Parser::is_valid_symbol(const std::string si, const int num_op)
 {
     for (auto it = this->instructions.begin(); it != this->instructions.end(); it++)
         if (it->first == si && it->second.second == num_op)
@@ -145,12 +148,12 @@ bool Parser::is_valid_symbol(std::string si, int num_op)
     return false;
 }
 
-void Parser::add_instruction(std::string inst, std::string op1, std::string op2, int line)
+void Parser::add_instruction(const std::string inst, const std::string op1, const std::string op2, const int line)
 {
     this->instruction_table.push_back(std::make_pair(inst, std::make_pair(op1, std::make_pair(op2, std::make_pair(line, instruction_table.size())))));
 }
 
-void Parser::add_symbol(std::string si, int val)
+void Parser::add_symbol(const std::string si, const int val)
 {
 	// Verifica se o elemento ja existe, se existir e o endereco for invalido substitui
 	for (auto it = this->symbol_table.begin(); it != this->symbol_table.end(); it++)
@@ -182,7 +185,6 @@ bool Parser::check_sintax(std::ifstream &source_file)
     std::cout << "Found." << std::endl 
             << "#Starting first pass... ";
     
-    //std::getline(source_file, line);
      // Primeira passada
     while (line != "END")
     {
@@ -317,14 +319,18 @@ bool Parser::check_sintax(std::ifstream &source_file)
     // Segunda passada
 	std::string op_bin = "";
 
-    for(auto it_symbol = instruction_table.begin(); it_symbol != instruction_table.end(); it_symbol++)
-    {
-		this->binary_code += this->get_instruction_opcode(it_symbol->first);
-		this->binary_code += this->get_instruction_opcode(it_symbol->second.first);
-		this->binary_code += this->get_instruction_opcode(it_symbol->second.second.first);
-    }
-	std::cout << this->binary_code << std::endl;
-        std::cout << this->binary_code.size() << std::endl;
+	std::ofstream obj_file;
+	obj_file.open(build_file);
+
+	for (auto it_symbol = instruction_table.begin(); it_symbol != instruction_table.end(); it_symbol++)
+	{
+		obj_file << this->get_instruction_opcode(it_symbol->first);
+		obj_file << this->get_instruction_opcode(it_symbol->second.first);
+		obj_file << this->get_instruction_opcode(it_symbol->second.second.first);
+	}	
+
+	obj_file.close();
+
     std::cout << "Done" << std::endl;
     
     return true;
