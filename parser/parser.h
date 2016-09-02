@@ -22,7 +22,8 @@ using vecPair_StrStr = std::vector<std::pair<std::string, std::string>>;
 using pair_StrPair_IntInt = std::pair<std::string, std::pair<int, int>>;
 using pair_StrPair_StrInt = std::pair<std::string, std::pair<std::string, int>>;
 
-class Parser {
+class Parser 
+{
 private:
     static Parser *instancia;
     // Vetor de instrucoes existentes <Nome_Instr <OpCode, Num_Operadores>>
@@ -41,16 +42,16 @@ private:
     void load_instructions();
     void load_operators();
     
-    std::vector<std::string> split_line(const std::string &text, char sep);
-    std::string dec_to_bin(int);
-	std::string get_instruction_opcode(std::string op);
-	std::string get_symbol_opcode(std::string op);
+    std::vector<std::string> split_line(const std::string &text, const char sep);
+    std::string dec_to_bin(const int);
+	std::string get_instruction_opcode(const std::string op);
+	std::string get_symbol_opcode(const std::string op);
     
-    bool is_operator(std::string op);
-    bool is_valid_symbol(std::string si, int num_op);
+    bool is_operator(const std::string op);
+    bool is_valid_symbol(const std::string si, int num_op);
     
-    void add_instruction(std::string si, std::string op1, std::string op2, int line);
-    void add_symbol(std::string si, int val);
+    void add_instruction(const std::string si, const std::string op1, const std::string op2, const int line);
+    void add_symbol(const std::string si, const int val);
 
 	bool check_sintax(std::ifstream &source_file);
     
