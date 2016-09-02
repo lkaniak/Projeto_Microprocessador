@@ -11,6 +11,9 @@
  * Created on August 28, 2016, 10:19 AM
  */
 
+#define instructions_file "../data/symbols.d"
+#define operators_file "../data/operator.d"
+
 #include "parser.h"
 Parser *Parser::instancia = nullptr;
 
@@ -37,7 +40,7 @@ Parser::~Parser()
 void Parser::load_instructions()
 {
 	std::ifstream symbols_file;
-	symbols_file.open("./data/symbols.d");
+	symbols_file.open(instructions_file);
 
 	if (!symbols_file.is_open())
 		throw std::runtime_error("Failed to open symbols file.");
@@ -56,7 +59,7 @@ void Parser::load_instructions()
 void Parser::load_operators()
 {
 	std::ifstream op_file;
-	op_file.open("./data/operator.d");
+	op_file.open(operators_file);
 
 	if (!op_file.is_open())
 		throw std::runtime_error("Failed to open operator file.");
