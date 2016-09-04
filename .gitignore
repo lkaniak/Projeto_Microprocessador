@@ -250,3 +250,17 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+/nbproject/Makefile-impl.mk
+/nbproject/Makefile-Debug.mk
+/nbproject/Package-Debug.bash
+/Makefile
+/nbproject/Package-Release.bash
+/nbproject/Makefile-Release.mk
+/nbproject/private/launcher.properties
+/nbproject/private/Makefile-variables.mk
+/nbproject/private/private.xml
+/nbproject/Makefile-variables.mk
+/nbproject/configurations.xml
+/.dep.inc
+/nbproject/private/configurations.xml
+/nbproject/project.xml
