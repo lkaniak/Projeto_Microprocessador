@@ -6,8 +6,9 @@
  * Created on August 28, 2016, 10:15 AM
  */
 
-#include "./parser/parser.h"
+#include "./headers/parser.h"
 #include <fstream>
+#include <vector>
 
 int main(int argc, char** argv)
 {

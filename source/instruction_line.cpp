@@ -5,6 +5,7 @@ instruction_line::instruction_line(const std::string name, const Instruction *op
       operator_1(operator_1), 
       operator_2(operator_2),
       num(-1),
+      label(""),
       line(line), 
       memory_pos(memory_pos)
 {
@@ -15,6 +16,29 @@ instruction_line::instruction_line(const std::string name, const Instruction *op
       operator_1(operator_1), 
       operator_2(nullptr),
       num(num), 
+      label(""),
+      line(line), 
+      memory_pos(memory_pos)
+{
+}
+
+instruction_line::instruction_line(const std::string name, const Instruction *operator_1, const std::string label, const int line, const int memory_pos)
+    : name(name), 
+      operator_1(operator_1), 
+      operator_2(nullptr),
+      num(-1),
+      label(label),
+      line(line), 
+      memory_pos(memory_pos)
+{
+}
+
+instruction_line::instruction_line(const std::string name, const std::string label, const Instruction *operator_2, const int line, const int memory_pos)
+    : name(name), 
+      operator_1(nullptr), 
+      operator_2(nullptr),
+      num(-1),
+      label(label),
       line(line), 
       memory_pos(memory_pos)
 {
@@ -55,8 +79,13 @@ std::string instruction_line::get_operator_2() const
     {
         return this->operator_2->get_name();
     }
-    else
+    else if(this->label != "")
+    {
+        return this->label;
+    }
+    else if(this->num != -1)
     {
         return std::to_string(this->num);
     }
+    return "";
 }

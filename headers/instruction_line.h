@@ -10,13 +10,17 @@ private:
     const std::string name;
     const Instruction *operator_1;
     const Instruction *operator_2;
+    const std::string label;
     const int num;
     const int line;
     const int memory_pos;
 
 public:
     instruction_line(const std::string name, const Instruction *operator_1, const Instruction *operator_2, const int line, const int memory_pos);
+    instruction_line(const std::string name, const Instruction *operator_1, const std::string label, const int line, const int memory_pos);
     instruction_line(const std::string name, const Instruction *operator_1, const int num, const int line, const int memory_pos);
+    instruction_line(const std::string name, const std::string label, const Instruction *operator_2, const int line, const int memory_pos);
+    
     ~instruction_line();
 
     void execute();

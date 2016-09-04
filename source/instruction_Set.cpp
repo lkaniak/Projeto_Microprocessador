@@ -1,14 +1,6 @@
-#ifdef _WIN32
+
 #define instructions_file "./data/symbols.d"
 #define operators_file "./data/operator.d"
-#define build_file "./build/temp.obj"
-
-#else // UNIX
-#define instructions_file "../data/symbols.d"
-#define operators_file "../data/operator.d"
-#define build_file "../build/temp.obj"
-
-#endif 
 
 #include "./../headers/instruction_Set.h"
 
@@ -109,6 +101,7 @@ Instruction *instruction_Set::get_operation_info(const std::string name)
             return this->operators[i];
         }
     }
+    
     return nullptr;
 }
 

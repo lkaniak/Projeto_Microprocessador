@@ -5,17 +5,7 @@
  * Created on August 28, 2016, 10:19 AM
  */
 
-#ifdef _WIN32
-#define instructions_file "./data/symbols.d"
-#define operators_file "./data/operator.d"
 #define build_file "./build/temp.obj"
-
-#else // UNIX
-#define instructions_file "../data/symbols.d"
-#define operators_file "../data/operator.d"
-#define build_file "../build/temp.obj"
-
-#endif 
 
 #include "./../headers/parser.h"
 Parser *Parser::instancia = nullptr;
@@ -101,7 +91,25 @@ void Parser::add_instruction(const std::string inst, const std::string op1, cons
 {
     auto _op1 = this->instancia_instruction_Set->get_operation_info(op1);
     auto _op2 = this->instancia_instruction_Set->get_operation_info(op2);
-    this->instruction_table.push_back(new instruction_line(inst, _op1,_op2, line, int(instruction_table.size())));
+    if (_op2 != nullptr && _op1 != nullptr)
+    {
+        this->instruction_table.push_back(new instruction_line(inst, _op1,_op2, line, int(instruction_table.size())));
+    }
+    else if(_op1 == nullptr)
+    {
+        this->instruction_table.push_back(new instruction_line(inst, op1,_op2, line, int(instruction_table.size())));
+    }
+    else
+    {
+        try
+        {
+            this->instruction_table.push_back(new instruction_line(inst, _op1,std::stoi(op2), line, int(instruction_table.size())));
+        }
+        catch (std::exception)
+        {
+            this->instruction_table.push_back(new instruction_line(inst, _op1,op2, line, int(instruction_table.size())));
+        }
+    }
 }
 
 void Parser::add_symbol(const std::string si, const int val)
@@ -268,16 +276,18 @@ bool Parser::check_sintax(std::ifstream &source_file)
     }
     
     // Segunda passada
-    std::string op_bin = "";
-
     std::ofstream obj_file;
     obj_file.open(build_file);
 
     for (auto i_symbol = 0; i_symbol < this->instruction_table.size(); i_symbol++)
     {
-        obj_file << this->get_instruction_opcode(this->instruction_table[i_symbol]->get_name());
-        obj_file << this->get_instruction_opcode(this->instruction_table[i_symbol]->get_operator_1());
-        obj_file << this->get_instruction_opcode(this->instruction_table[i_symbol]->get_operator_2());
+        std::string op_code;
+        op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_name());
+        obj_file << op_code;
+        op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_operator_1());
+        obj_file << op_code;
+        op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_operator_2());
+        obj_file << op_code;
     }    
 
     obj_file.close();
