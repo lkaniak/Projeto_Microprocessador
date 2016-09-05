@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   parser.cpp
  * Author: toad
@@ -11,7 +5,9 @@
  * Created on August 28, 2016, 10:19 AM
  */
 
-#include "parser.h"
+#define build_file "./build/temp.obj"
+
+#include "./../headers/parser.h"
 Parser *Parser::instancia = nullptr;
 
 Parser *Parser::get_instancia()
@@ -24,52 +20,109 @@ Parser *Parser::get_instancia()
     return instancia;
 }
 
-
 Parser::Parser()
 {
-    load_instructions();
-    load_operators();
-}
-
-Parser::Parser(const Parser& orig)
-{
-    
+    this->instancia_instruction_Set = instruction_Set::get_instancia();
 }
 
 Parser::~Parser()
 {
 }
 
-std::string Parser::make_object(std::ifstream &source_file)
+std::string Parser::dec_to_bin(const int dec_num)
 {
-    std::cout << std::endl << "Checking for sintax errors:" << std::endl;
-    check_sintax(source_file);
-    std::cout << "Ok" << std::endl;
-    return "";
+    return std::bitset<8>(dec_num).to_string();
 }
-bool Parser::is_operator(std::string op)
+
+std::string Parser::get_instruction_opcode(const std::string op)
 {
-    for (auto it = this->operators.begin(); it != this->operators.end(); it++)
+    auto instruc = this->instancia_instruction_Set->get_operation_info(op);
+        if (instruc != nullptr)
+        {
+            return instruc->get_opcode();
+        }
+    try
+    {
+        return this->dec_to_bin(std::stoi(op));
+    }
+    catch (const std::invalid_argument)
+    {
+        if (!op.empty())
+            return this->dec_to_bin(std::stoi(this->get_symbol_opcode(op)));
+        else
+            return "";
+    }
+
+    return std::string();
+}
+
+std::string Parser::get_symbol_opcode(const std::string op)
+{
+    for (auto it = this->symbol_table.begin(); it != this->symbol_table.end(); it++)
         if (it->first == op)
-            return true;
+            return std::to_string(it->second);
+    return std::string();
+}
+
+bool Parser::is_operator(const std::string op)
+{
+    auto instruc = this->instancia_instruction_Set->get_operation_info(op);
+    if (instruc != nullptr && instruc->get_num_operators() == -1)
+    {
+        return true;
+    }
     return false;
 }
 
-bool Parser::is_valid_symbol(std::string si, int num_op)
+bool Parser::is_valid_symbol(const std::string op, const int num_op)
 {
-    for (auto it = this->instructions.begin(); it != this->instructions.end(); it++)
-        if (it->first == si && it->second.second == num_op)
+    auto instruc = this->instancia_instruction_Set->get_operation_info(op);
+    if (instruc != nullptr)
+    {
+        if (instruc->get_num_operators() == num_op || instruc->get_num_operators() == -1)
+        {
             return true;
+        }
+    }
     return false;
 }
 
-void Parser::add_instruction(std::string inst, std::string op1, std::string op2, int line)
+void Parser::add_instruction(const std::string inst, const std::string op1, const std::string op2, const int line)
 {
-    this->instruction_table.push_back(std::make_pair(inst, std::make_pair(op1, std::make_pair(op2, std::make_pair(line, instruction_table.size())))));
+    auto _op1 = this->instancia_instruction_Set->get_operation_info(op1);
+    auto _op2 = this->instancia_instruction_Set->get_operation_info(op2);
+    if (_op2 != nullptr && _op1 != nullptr)
+    {
+        this->instruction_table.push_back(new instruction_line(inst, _op1,_op2, line, int(instruction_table.size())));
+    }
+    else if(_op1 == nullptr)
+    {
+        this->instruction_table.push_back(new instruction_line(inst, op1,_op2, line, int(instruction_table.size())));
+    }
+    else
+    {
+        try
+        {
+            this->instruction_table.push_back(new instruction_line(inst, _op1,std::stoi(op2), line, int(instruction_table.size())));
+        }
+        catch (std::exception)
+        {
+            this->instruction_table.push_back(new instruction_line(inst, _op1,op2, line, int(instruction_table.size())));
+        }
+    }
 }
 
-void Parser::add_symbol(std::string si, int val)
+void Parser::add_symbol(const std::string si, const int val)
 {
+    // Verifica se o elemento ja existe, se existir e o endereco for invalido substitui
+    for (auto it = this->symbol_table.begin(); it != this->symbol_table.end(); it++)
+        if (si == it->first)
+            if (it->second == -1)
+            {
+                it->second = val;
+                return;
+            }
+                
     this->symbol_table.push_back(std::make_pair(si, val));
 }
 
@@ -77,6 +130,7 @@ bool Parser::check_sintax(std::ifstream &source_file)
 {
     auto line_count = 0;
     std::string line = "";
+    auto utils_instancia = utils::get_instancia();
    
     std::cout << "#Looking for start... ";
     // Busca inicio do codigo
@@ -91,7 +145,6 @@ bool Parser::check_sintax(std::ifstream &source_file)
     std::cout << "Found." << std::endl 
             << "#Starting first pass... ";
     
-    //std::getline(source_file, line);
      // Primeira passada
     while (line != "END")
     {
@@ -108,7 +161,7 @@ bool Parser::check_sintax(std::ifstream &source_file)
         // Caso a linha nao tenha comentario
         else if (line.find("//") == std::string::npos)
         {
-            auto instruction_token = split_line(line, ' ');
+            auto instruction_token = utils_instancia->split_line(line, ' ');
             
             // Continua o loop se for linha em branco
             if (instruction_token.size() == 0)
@@ -118,7 +171,7 @@ bool Parser::check_sintax(std::ifstream &source_file)
             {
                 
                 // Faz a quebra dos operandos
-                auto operand_token = split_line(instruction_token[1], ',');
+                auto operand_token = utils_instancia->split_line(instruction_token[1], ',');
                 if (operand_token.size() == 2)
                 {
                     if (!this->is_valid_symbol(instruction_token[0], 2))
@@ -136,6 +189,18 @@ bool Parser::check_sintax(std::ifstream &source_file)
                         {
                             auto error = "Error in line " + std::to_string(line_count) +  ". Not an operator.";
                             throw std::runtime_error(error);
+                        }
+                        else
+                        {
+                            // Tenta converter para inteiro
+                            try
+                            {
+                                std::stoi(operand_token[1]);
+                            }
+                            catch (const std::invalid_argument)
+                            {
+                                this->add_symbol(operand_token[1], -1);
+                            }
                         }
                     }
                     this->add_instruction(instruction_token[0], operand_token[0], operand_token[1], line_count);
@@ -156,7 +221,7 @@ bool Parser::check_sintax(std::ifstream &source_file)
                         for(auto it = symbol_table.begin(); it != symbol_table.end(); it++)
                             if (it->first == operand_token[0])
                             {
-                                operand_token[0] = it->second;
+                                //operand_token[0] = it->second;
                                 found = true;
                             }
                         if (!found)
@@ -190,75 +255,52 @@ bool Parser::check_sintax(std::ifstream &source_file)
         // Ignora se for linha vazia ou comentario
         if (line[0] != '\n' && line[0] != '/' && line != "")
         {
-            auto const_token = split_line(line, ' ');
+            auto const_token = utils_instancia->split_line(line, ' ');
             this->add_symbol(const_token[0], std::stoi(const_token[1]));
         }
     }
     std::cout << "Done" << std::endl
             << "#Starting second pass... ";
     
-    std::cout << line_count << " " << instruction_table.size() << std::endl;
     source_file.close();
     line_count = 0;
-    
-    // Segunda passada
-    for(auto it_symbol = instruction_table.begin(); it_symbol != instruction_table.end(); it_symbol++)
+
+    // Verifica se todos os operadores foram corretamente mapeados
+    for (auto it = this->symbol_table.begin(); it != this->symbol_table.end(); it++)
     {
-        
+        if (it->second == -1)
+        {
+            auto error = "Operator '" + it->first + "' is unkown.";
+            throw std::runtime_error(error);
+        }
     }
     
+    // Segunda passada
+    std::ofstream obj_file;
+    obj_file.open(build_file);
+
+    for (auto i_symbol = 0; i_symbol < this->instruction_table.size(); i_symbol++)
+    {
+        std::string op_code;
+        op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_name());
+        obj_file << op_code;
+        op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_operator_1());
+        obj_file << op_code;
+        op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_operator_2());
+        obj_file << op_code;
+    }    
+
+    obj_file.close();
+
     std::cout << "Done" << std::endl;
     
     return true;
 }
 
-std::vector<std::string> Parser::split_line(const std::string &text, char sep) {
-    std::vector<std::string> tokens;
-    std::size_t start = 0, end = 0;
-    while ((end = text.find(sep, start)) != std::string::npos) {
-        std::string temp = text.substr(start, end - start);
-        if (temp != "") tokens.push_back(temp);
-        start = end + 1;
-    }
-    std::string temp = text.substr(start);
-    if (temp != "") tokens.push_back(temp);
-    return tokens;
-}
-
-void Parser::load_instructions()
+std::string Parser::make_object(std::ifstream &source_file)
 {
-    std::ifstream symbols_file;
-    symbols_file.open("../data/symbols.d");
-    
-    if (!symbols_file.is_open())
-        throw std::runtime_error("Failed to open symbols file.");
-    
-    std::cout << "Loading symbols... ";
-    std::string line;
-    for (std::getline(symbols_file, line); !symbols_file.eof(); std::getline(symbols_file, line))
-    {
-        auto line_tokens = split_line(line, ' ');
-        this->instructions.push_back(std::make_pair(line_tokens[0], std::make_pair(std::stoi(line_tokens[1]), std::stoi(line_tokens[2]))));
-    }
-    symbols_file.close();
-    std::cout << "Done."  << std::endl;    
-}
-
-void Parser::load_operators()
-{
-    std::ifstream op_file;
-    op_file.open("../data/operator.d");
-    
-    if (!op_file.is_open())
-        throw std::runtime_error("Failed to open operator file.");
-    
-    std::cout << "Loading operators... ";
-    std::string line;
-    for(std::getline(op_file, line); !op_file.eof(); std::getline(op_file, line))
-    {
-        auto line_tokens = split_line(line, ' ');
-        this->operators.push_back(std::make_pair(line_tokens[0], std::stoi(line_tokens[1])));
-    }
-    op_file.close();
-    std::cout << "Done." << std::endl;
+    std::cout << std::endl << "Checking for sintax errors:" << std::endl;
+    check_sintax(source_file);
+    std::cout << "Ok" << std::endl;
+    return "";
 }
