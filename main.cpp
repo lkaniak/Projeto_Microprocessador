@@ -9,15 +9,25 @@
 #include "./headers/parser.h"
 #include <fstream>
 #include <vector>
+#include <exception>
 
 int main(int argc, char** argv)
 {
     auto parser = Parser::get_instancia();
     std::ifstream programa;
     programa.open("./exemple.asm");
-    if (!programa.is_open())
-        throw std::runtime_error("erro ao abrir arquivo de instrucoes");
-    parser->make_object(programa);
+	if (!programa.is_open())
+	{
+		throw std::runtime_error("erro ao abrir arquivo de instrucoes");
+	}
+	try
+	{
+		std::cout << parser->make_object(programa) << std::endl;
+	}
+	catch (std::exception &e)
+	{
+		std::cout << std::endl << std::endl << "###" << e.what() << std::endl;
+	}
     
     
     return 0;

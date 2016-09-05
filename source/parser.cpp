@@ -275,6 +275,12 @@ bool Parser::check_sintax(std::ifstream &source_file)
         }
     }
     
+	struct stat info;
+
+	if (stat("./build", &info) != 0)
+	{
+		throw std::runtime_error("Folder './build' does not exist!");
+	}
     // Segunda passada
     std::ofstream obj_file;
     obj_file.open(build_file);

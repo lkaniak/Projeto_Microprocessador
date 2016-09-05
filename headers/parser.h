@@ -14,6 +14,7 @@
 #include <fstream>
 #include <exception>
 #include <bitset>
+#include <sys/stat.h>
 
 #include <iostream>
 
@@ -41,10 +42,6 @@ private:
     
     Parser();    
     
-    void load_instructions();
-    void load_operators();
-    
-    std::vector<std::string> split_line(const std::string &text, const char sep);
     std::string dec_to_bin(const int);
     std::string get_instruction_opcode(const std::string op);
     std::string get_symbol_opcode(const std::string op);
