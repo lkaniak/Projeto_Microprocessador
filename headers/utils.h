@@ -11,7 +11,8 @@
 #include <vector>
 #include <string>
 
-class utils {
+class utils 
+{
 private:
     static utils *instancia;
 

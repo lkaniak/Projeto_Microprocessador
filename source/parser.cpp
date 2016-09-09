@@ -126,7 +126,7 @@ void Parser::add_symbol(const std::string si, const int val)
     this->symbol_table.push_back(std::make_pair(si, val));
 }
 
-bool Parser::check_sintax(std::ifstream &source_file)
+void Parser::check_sintax(std::ifstream &source_file)
 {
     auto line_count = 0;
     std::string line = "";
@@ -138,8 +138,10 @@ bool Parser::check_sintax(std::ifstream &source_file)
     {
         line_count++;
         std::getline(source_file, line);
-        if (source_file.eof())
-            throw std::runtime_error("START not found");
+		if (source_file.eof())
+		{
+			throw std::runtime_error("START not found");
+		}
     }
     
     std::cout << "Found." << std::endl 
@@ -274,39 +276,41 @@ bool Parser::check_sintax(std::ifstream &source_file)
             throw std::runtime_error(error);
         }
     }
-    
+}
+
+void Parser::translate_code()
+{
 	struct stat info;
 
 	if (stat("./build", &info) != 0)
 	{
 		throw std::runtime_error("Folder './build' does not exist!");
 	}
-    // Segunda passada
-    std::ofstream obj_file;
-    obj_file.open(build_file);
+	// Segunda passada
+	std::ofstream obj_file;
+	obj_file.open(build_file);
 
-    for (auto i_symbol = 0; i_symbol < this->instruction_table.size(); i_symbol++)
-    {
-        std::string op_code;
-        op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_name());
-        obj_file << op_code;
-        op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_operator_1());
-        obj_file << op_code;
-        op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_operator_2());
-        obj_file << op_code;
-    }    
+	for (auto i_symbol = 0; i_symbol < this->instruction_table.size(); i_symbol++)
+	{
+		std::string op_code;
+		op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_name());
+		obj_file << op_code;
+		op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_operator_1());
+		obj_file << op_code;
+		op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_operator_2());
+		obj_file << op_code;
+	}
 
-    obj_file.close();
+	obj_file.close();
 
-    std::cout << "Done" << std::endl;
-    
-    return true;
+	std::cout << "Done" << std::endl;
 }
 
 std::string Parser::make_object(std::ifstream &source_file)
 {
     std::cout << std::endl << "Checking for sintax errors:" << std::endl;
-    check_sintax(source_file);
+    this->check_sintax(source_file);
+	this->translate_code();
     std::cout << "Ok" << std::endl;
     return "";
 }

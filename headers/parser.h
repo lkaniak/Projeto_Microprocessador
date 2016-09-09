@@ -52,7 +52,8 @@ private:
     void add_instruction(const std::string si, const std::string op1, const std::string op2, const int line);
     void add_symbol(const std::string si, const int val);
 
-    bool check_sintax(std::ifstream &source_file);
+    void check_sintax(std::ifstream &source_file);
+	void translate_code();
     
 public:
     static Parser *get_instancia();
