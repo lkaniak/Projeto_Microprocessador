@@ -228,7 +228,7 @@ void Parser::check_sintax(std::ifstream &source_file)
                             }
                         if (!found)
                         {
-                            this->add_symbol(line, -1);
+                            this->add_symbol(operand_token[1], -1);
                         }
                     }
                                         
