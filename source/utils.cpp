@@ -20,7 +20,7 @@ utils *utils::get_instancia()
     return instancia;
 }
 
-void utils::generate_csv(Parser* P)
+void utils::generate_csv(vecPair_StrInt* Symb, std::vector<instruction_line*> * Instr)
 {
 	struct stat info;
 
@@ -32,11 +32,6 @@ void utils::generate_csv(Parser* P)
 	std::ofstream tbinstr;
 	std::ofstream tbsymb;
 	std::string str;
-	vecPair_StrInt Symb;	//symbol table
-	std::vector<instruction_line*> Instr;	//Instruction table
-	
-	Symb = P->get_symbol_table();
-	Instr = P->get_intruction_table();
 
 	tbinstr.open(instruction_table_file);
 
@@ -45,15 +40,15 @@ void utils::generate_csv(Parser* P)
 	str = "Instruction,First operand,Second Operand\n";
 	tbinstr << str;
 
-	for (auto i_symbol = 0; i_symbol < Instr.size(); i_symbol++)
+	for (auto i_symbol = 0; i_symbol < Instr->size(); i_symbol++)
 	{
-		str = Instr[i_symbol]->get_name();
+		str = Instr->at(i_symbol)->get_name();
 		str.insert(0, "\"");
 		tbinstr << str + "\",";
-		str = Instr[i_symbol]->get_operator_1();
+		str = Instr->at(i_symbol)->get_operator_1();
 		str.insert(0, "\"");
 		tbinstr << str + "\",";
-		str = Instr[i_symbol]->get_operator_2();
+		str = Instr->at(i_symbol)->get_operator_2();
 		str.insert(0, "\"");
 		tbinstr << str + "\"\n";
 	}
@@ -66,7 +61,7 @@ void utils::generate_csv(Parser* P)
 	str = "Symbol,Value/Line\n";
 	tbsymb << str;
 
-	for (auto it = Symb.begin(); it != Symb.end(); it++)
+	for (auto it = Symb->begin(); it != Symb->end(); it++)
 	{
 		str = it->first;
 		str.insert(0, "\"");
