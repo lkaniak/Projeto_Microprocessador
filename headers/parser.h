@@ -33,8 +33,8 @@ using pair_StrPair_StrInt = std::pair<std::string, std::pair<std::string, int>>;
 class Parser 
 {
 private:
-    static Parser *instancia;
-    instruction_Set *instancia_instruction_Set;
+    static Parser* instancia;
+    instruction_Set* instancia_instruction_Set;
     // Vetor de instrucoes <OP, <R1, <R2, <Linha, Pos_Memoria>>>>
     std::vector<instruction_line*> instruction_table;
     // Vetor de constantes <Nome, Valor/Endereco>

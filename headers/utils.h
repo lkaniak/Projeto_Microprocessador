@@ -10,7 +10,7 @@
 
 #include <vector>
 #include <string>
-#include <fstream>
+#include "./../headers/parser.h"
 
 #define instruction_table_file "./build/instruction_table.csv"
 #define symbol_table_file "./build/symbol_table.csv"

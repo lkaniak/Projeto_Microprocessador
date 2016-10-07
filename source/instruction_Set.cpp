@@ -120,10 +120,12 @@ void instruction_Set::execute_instruction(instruction_line op)
 
 void instruction_Set::mov(Operator r1, Operator r2)
 {
+	r1.get_op_code() = r2.get_op_code();
 }
 
 void instruction_Set::mov(Operator r1, int num)
 {
+	
 }
 
 void instruction_Set::add(Operator r1, Operator r2)

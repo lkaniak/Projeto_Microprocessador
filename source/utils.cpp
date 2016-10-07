@@ -35,8 +35,8 @@ void utils::generate_csv(Parser* P)
 	vecPair_StrInt Symb;	//symbol table
 	std::vector<instruction_line*> Instr;	//Instruction table
 	
-	Symb = P->get_symbol_table;
-	Instr = P->get_intruction_table;
+	Symb = P->get_symbol_table();
+	Instr = P->get_intruction_table();
 
 	tbinstr.open(instruction_table_file);
 
