@@ -314,3 +314,15 @@ std::string Parser::make_object(std::ifstream &source_file)
     std::cout << "Ok" << std::endl;
     return "";
 }
+
+std::vector<instruction_line*> Parser::get_intruction_table()
+{
+	return this->instruction_table;
+}
+
+vecPair_StrInt Parser::get_symbol_table()
+{
+	return this->symbol_table;
+}
+
+
