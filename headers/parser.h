@@ -23,6 +23,8 @@
 #include "utils.h"
 #include "instruction_Set.h"
 
+
+
 using vecPair_StrInt = std::vector<std::pair<std::string, int>>;
 using vecPair_StrStr = std::vector<std::pair<std::string, std::string>>;
 using pair_StrPair_IntInt = std::pair<std::string, std::pair<int, int>>;
@@ -31,8 +33,8 @@ using pair_StrPair_StrInt = std::pair<std::string, std::pair<std::string, int>>;
 class Parser 
 {
 private:
-    static Parser *instancia;
-    instruction_Set *instancia_instruction_Set;
+    static Parser* instancia;
+    instruction_Set* instancia_instruction_Set;
     // Vetor de instrucoes <OP, <R1, <R2, <Linha, Pos_Memoria>>>>
     std::vector<instruction_line*> instruction_table;
     // Vetor de constantes <Nome, Valor/Endereco>
@@ -58,7 +60,8 @@ private:
 public:
     static Parser *get_instancia();
     std::string make_object(std::ifstream &source_file);
-    
+	std::vector<instruction_line*> get_intruction_table();
+	vecPair_StrInt get_symbol_table();
     ~Parser();
 };
 
