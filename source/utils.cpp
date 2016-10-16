@@ -29,49 +29,48 @@ void utils::generate_csv(vecPair_StrInt* Symb, std::vector<instruction_line*> * 
 		throw std::runtime_error("Folder './build' does not exist!");
 	}
 
-	std::ofstream tbinstr;
-	std::ofstream tbsymb;
+	std::ofstream table;
 	std::string str;
 
-	tbinstr.open(instruction_table_file);
+	table.open(instruction_table_file);
 
 	str = "sep=,\n";
-	tbinstr << str;
+	table << str;
 	str = "Instruction,First operand,Second Operand\n";
-	tbinstr << str;
+	table << str;
 
 	for (auto i_symbol = 0; i_symbol < Instr->size(); i_symbol++)
 	{
 		str = Instr->at(i_symbol)->get_name();
 		str.insert(0, "\"");
-		tbinstr << str + "\",";
+		table << str + "\",";
 		str = Instr->at(i_symbol)->get_operator_1();
 		str.insert(0, "\"");
-		tbinstr << str + "\",";
+		table << str + "\",";
 		str = Instr->at(i_symbol)->get_operator_2();
 		str.insert(0, "\"");
-		tbinstr << str + "\"\n";
+		table << str + "\"\n";
 	}
 
-	tbinstr.close();
-	tbsymb.open(symbol_table_file);
+	table.close();
+	table.open(symbol_table_file);
 
 	str = "sep=,\n";
-	tbsymb << str;
+	table << str;
 	str = "Symbol,Value/Line\n";
-	tbsymb << str;
+	table << str;
 
 	for (auto it = Symb->begin(); it != Symb->end(); it++)
 	{
 		str = it->first;
 		str.insert(0, "\"");
-		tbsymb << str + "\",";
+		table << str + "\",";
 		str = std::to_string(it->second);
 		str.insert(0, "\"");
-		tbsymb << str + "\"\n";
+		table << str + "\"\n";
 	}
 
-	tbsymb.close();
+	table.close();
 
 
 }
