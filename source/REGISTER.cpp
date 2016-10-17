@@ -1,0 +1,12 @@
+#include "REGISTER.h"
+
+
+
+REGISTER::REGISTER()
+{
+}
+
+
+REGISTER::~REGISTER()
+{
+}
