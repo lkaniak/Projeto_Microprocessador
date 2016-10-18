@@ -311,6 +311,7 @@ std::string Parser::make_object(std::ifstream &source_file)
     std::cout << std::endl << "Checking for sintax errors:" << std::endl;
     this->check_sintax(source_file);
 	this->translate_code();
+	utils::get_instancia()->generate_csv(&this->symbol_table, &this->instruction_table);
     std::cout << "Ok" << std::endl;
     return "";
 }
