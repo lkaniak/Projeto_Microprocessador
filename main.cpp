@@ -12,6 +12,7 @@
 #include <exception>
 
 #include "headers/DECODER.h"
+#include "headers/MEMORY.h"
 
 int main(int argc, char** argv)
 {
@@ -34,6 +35,7 @@ int main(int argc, char** argv)
     
 
 	/////////TESTE//////////////
+	auto mem = new MEMORY();
 	auto dec = DECODER::get_instancia();
 	dec->decode("00100111");
 	std::cout << ALU::get_instancia()->get_result() << "\n";

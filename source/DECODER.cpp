@@ -47,6 +47,7 @@ void DECODER::decode(std::string instruction)
 		else if (opcode.size() == 2)
 		{
 			operator_2_translated = inst_set->get_operation_name(opcode);
+
 			break;
 		}
 	}

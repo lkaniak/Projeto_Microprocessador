@@ -32,13 +32,6 @@ EU * EU::get_instancia()
 
 void EU::process(std::string op, std::string reg_1, std::string reg_2)
 {
-	/*REGISTER* r1 = *std::find(main_registers.cbegin(), main_registers.cend(), [reg_1](REGISTER &r) {
-		return r.get_name().compare(reg_1) == 0;
-	});
-	REGISTER* r2 = *std::find(main_registers.cbegin(), main_registers.cend(), [reg_2](REGISTER &r) {
-		return r.get_name().compare(reg_2) == 0;
-	});*/
-
 	REGISTER* r1 = nullptr;
 	REGISTER* r2 = nullptr;
 	for (auto it = this->main_registers.cbegin(); it != this->main_registers.cend(); ++it)
