@@ -17,6 +17,9 @@
 #include "instruction_line.h"
 #include "Instruction.h"
 #include "Operator.h"
+#include "ALU.h"
+#include "REGISTER.h"
+#include "BUS.h"
 
 class instruction_Set
 {
@@ -34,7 +37,7 @@ private:
     // Dois operadores
     void mov(Operator r1, Operator r2); // MOV R1, R2
     void mov(Operator r1, int num); //MOV R1, CONST
-    void add(Operator r1, Operator r2);
+    void add(REGISTER *r1, REGISTER *r2);
     void sub(Operator r1, Operator r2);
     void div(Operator r1, Operator r2);
     void mul(Operator r1, Operator r2);
@@ -73,9 +76,10 @@ public:
     instruction_Set();
     ~instruction_Set();
 
-    void execute_instruction(instruction_line op);
+    void execute_instruction(std::string op, REGISTER *r1, REGISTER *r2);
     //void execute_instruction(instruction_line op);
     Instruction *get_operation_info(const std::string name);
+	Instruction *get_operation_name(const std::string opcode);
 };
 
 #endif /* INSTRUCTION_SET_H */

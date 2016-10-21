@@ -1,13 +1,18 @@
 #pragma once
 #include <string>
+#include "REGISTER.h"
 
 class BUS
 {
-public:
+private:
+	static BUS* instancia;
 	BUS();
 	~BUS();
 
-	void transfer_to(std::string register);
-	std::string transfer_from(std::string register);
+
+public:
+	static BUS* get_instancia();
+
+	void transfer(REGISTER *from, REGISTER *to);
 };
 

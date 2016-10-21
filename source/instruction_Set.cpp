@@ -24,16 +24,12 @@ instruction_Set::instruction_Set()
 
 
 instruction_Set::~instruction_Set()
-{/*
-    for(auto it = this->operators.begin(); it !=  this->operators.end(); it++)
-    {
-        delete it;
-    }
-    for(auto it = this->instructions.begin(); it !=  this->instructions.end(); it++)
-    {
-        delete it;
-    }
-   */ 
+{
+}
+
+void instruction_Set::execute_instruction(std::string op, REGISTER * r1, REGISTER * r2)
+{
+	this->add(r1, r2);
 }
 
 void instruction_Set::load_instructions()
@@ -105,13 +101,33 @@ Instruction *instruction_Set::get_operation_info(const std::string name)
     return nullptr;
 }
 
+Instruction *instruction_Set::get_operation_name(const std::string opcode)
+{
+	// Verifica tabela de instrucoes
+	for (auto i = 0; i < this->instructions.size(); i++)
+	{
+		if (this->instructions[i]->get_opcode() == opcode)
+		{
+			return this->instructions[i];
+		}
+
+	}
+
+	// Verifica tabela de registradores
+	for (auto i = 0; i < this->operators.size(); i++)
+	{
+		if (this->operators[i]->get_opcode() == opcode)
+		{
+			return this->operators[i];
+		}
+	}
+
+	return nullptr;
+}
+
 //////////////////////////////////////
 //  LISTA DE INSTRUCOES COMECA AQUI //
 //////////////////////////////////////
-void instruction_Set::execute_instruction(instruction_line op)
-{
-
-}
 /*
 void instruction_Set::execute_instruction(instruction_line op)
 {
@@ -128,8 +144,13 @@ void instruction_Set::mov(Operator r1, int num)
 	
 }
 
-void instruction_Set::add(Operator r1, Operator r2)
+void instruction_Set::add(REGISTER *r1, REGISTER *r2)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	bus->transfer(r2, alu->get_second());
+	alu->execute();
 }
 
 void instruction_Set::sub(Operator r1, Operator r2)

@@ -11,6 +11,8 @@
 #include <vector>
 #include <exception>
 
+#include "headers/DECODER.h"
+
 int main(int argc, char** argv)
 {
     auto parser = Parser::get_instancia();
@@ -30,6 +32,12 @@ int main(int argc, char** argv)
 	}
     
     
+
+	/////////TESTE//////////////
+	auto dec = DECODER::get_instancia();
+	dec->decode("00100111");
+	std::cout << ALU::get_instancia()->get_result() << "\n";
+	///////REMOVER//////////////
     return 0;
 }
 

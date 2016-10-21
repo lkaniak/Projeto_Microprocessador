@@ -4,12 +4,15 @@
 class REGISTER
 {
 private:
-	std::string value;
+	std::string name;
+	int value;
 public:
-	REGISTER();
+	REGISTER(std::string name);
+	REGISTER(std::string name, int v);
 	~REGISTER();
 
-	void get_value();
-	void set_value(std::string value);
+	int get_value();
+	void set_value(int value);
+	std::string get_name();
 };
 
