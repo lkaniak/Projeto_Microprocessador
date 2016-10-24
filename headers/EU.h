@@ -16,5 +16,7 @@ public:
 	static EU* get_instancia();
 
 	void process(std::string op, std::string reg_1, std::string reg_2);
+	void process(std::string op, std::string reg_1);
+	void process(std::string op);
 };
 

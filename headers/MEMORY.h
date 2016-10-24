@@ -12,7 +12,8 @@ public:
 	MEMORY();
 	~MEMORY();
 
-	bool save_to_address(std::string add);
-	std::string load_from_address(std::string add);
+	bool save_to_address(int add);
+	std::string load_from_address(int add);
+
 };
 

@@ -20,6 +20,19 @@ instruction_Set::instruction_Set()
 {
     this->load_instructions();
     this->load_operators();
+
+	// Populate MAP
+	map_FnPtr_RegReg->insert (
+		{"MOV", mov},
+		{"ADD", add}
+	);
+
+	map_FnPtr_RegInt = {
+		{"MOV", mov}
+	}
+
+
+
 }
 
 
@@ -134,12 +147,11 @@ void instruction_Set::execute_instruction(instruction_line op)
 
 }*/
 
-void instruction_Set::mov(Operator r1, Operator r2)
+void instruction_Set::mov(REGISTER *r1, REGISTER *r2)
 {
-	r1.get_op_code() = r2.get_op_code();
 }
 
-void instruction_Set::mov(Operator r1, int num)
+void instruction_Set::mov(REGISTER *r1, int num)
 {
 	
 }
@@ -153,107 +165,107 @@ void instruction_Set::add(REGISTER *r1, REGISTER *r2)
 	alu->execute();
 }
 
-void instruction_Set::sub(Operator r1, Operator r2)
+void instruction_Set::sub(REGISTER *r1, REGISTER *r2)
 {
 }
 
-void instruction_Set::div(Operator r1, Operator r2)
+void instruction_Set::div(REGISTER *r1, REGISTER *r2)
 {
 }
 
-void instruction_Set::mul(Operator r1, Operator r2)
+void instruction_Set::mul(REGISTER *r1, REGISTER *r2)
 {
 }
 
-void instruction_Set::cmp(Operator r1)
+void instruction_Set::cmp(REGISTER *r1)
 {
 }
 
-void instruction_Set:: _and(Operator r1)
+void instruction_Set:: _and(REGISTER *r1)
 {
 }
 
-void instruction_Set:: _or(Operator r1)
+void instruction_Set:: _or(REGISTER *r1)
 {
 }
 
-void instruction_Set:: _xor(Operator r1)
+void instruction_Set:: _xor(REGISTER *r1)
 {
 }
 
-void instruction_Set::push(Operator r1)
+void instruction_Set::push(REGISTER *r1)
 {
 }
 
-void instruction_Set::pop(Operator r1)
+void instruction_Set::pop(REGISTER *r1)
 {
 }
 
-void instruction_Set::_not(Operator r1)
+void instruction_Set::_not(REGISTER *r1)
 {
 }
 
-void instruction_Set::inc(Operator r1)
+void instruction_Set::inc(REGISTER *r1)
 {
 }
 
-void instruction_Set::dec(Operator r1)
+void instruction_Set::dec(REGISTER *r1)
 {
 }
 
-void instruction_Set::load(Operator r1)
+void instruction_Set::load(REGISTER *r1)
 {
 }
 
-void instruction_Set::store(Operator r1)
+void instruction_Set::store(REGISTER *r1)
 {
 }
 
-void instruction_Set::interrupt(Operator r1)
+void instruction_Set::interrupt(REGISTER *r1)
 {
 }
 
-void instruction_Set::jmp(Operator r1)
+void instruction_Set::jmp(REGISTER *r1)
 {
 }
 
-void instruction_Set::jg(Operator r1)
+void instruction_Set::jg(REGISTER *r1)
 {
 }
 
-void instruction_Set::je(Operator r1)
+void instruction_Set::je(REGISTER *r1)
 {
 }
 
-void instruction_Set::jne(Operator r1)
+void instruction_Set::jne(REGISTER *r1)
 {
 }
 
-void instruction_Set::jl(Operator r1)
+void instruction_Set::jl(REGISTER *r1)
 {
 }
 
-void instruction_Set::jz(Operator r1)
+void instruction_Set::jz(REGISTER *r1)
 {
 }
 
-void instruction_Set::jnz(Operator r1)
+void instruction_Set::jnz(REGISTER *r1)
 {
 }
 
-void instruction_Set::ja(Operator r1)
+void instruction_Set::ja(REGISTER *r1)
 {
 }
 
-void instruction_Set::jb(Operator r1)
+void instruction_Set::jb(REGISTER *r1)
 {
 }
 
-void instruction_Set::ret(Operator r1)
+void instruction_Set::ret(REGISTER *r1)
 {
 }
 
-void instruction_Set::call(Operator r1)
+void instruction_Set::call(REGISTER *r1)
 {
 }
 

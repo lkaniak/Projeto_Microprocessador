@@ -37,7 +37,7 @@ MEMORY::~MEMORY()
 {
 }
 
-std::string MEMORY::load_from_address(std::string add)
+std::string MEMORY::load_from_address(int add)
 {
-	return *std::find(this->memory.cbegin(), this->memory.cend(), add);
+	return memory[add];
 }

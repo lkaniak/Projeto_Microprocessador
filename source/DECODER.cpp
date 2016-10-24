@@ -34,27 +34,43 @@ void DECODER::decode(std::string instruction)
 
 	instruction.erase(0, instr_translated->get_opcode().size());
 
-	// Pega os registradores
-	opcode = "";
-	for (auto o : instruction)
+	auto tot_op = instr_translated->get_num_operators();
+	if (tot_op > 0)
 	{
-		opcode += o;
-		if (operator_1_translated == nullptr && opcode.size() ==  2)
+		// Pega os registradores
+		opcode = "";
+		for (auto o : instruction)
 		{
-			operator_1_translated = inst_set->get_operation_name(opcode);
-			opcode = "";
-		}
-		else if (opcode.size() == 2)
-		{
-			operator_2_translated = inst_set->get_operation_name(opcode);
+			opcode += o;
+			if (operator_1_translated == nullptr && opcode.size() == 2)
+			{
+				operator_1_translated = inst_set->get_operation_name(opcode);
+				opcode = "";
+			}
+			else if (tot_op == 2 && opcode.size() == 2)
+			{
+				operator_2_translated = inst_set->get_operation_name(opcode);
 
-			break;
+				break;
+			}
+		}
+
+		if (tot_op == 2)
+		{
+			EU::get_instancia()->process(instr_translated->get_name(),
+				operator_1_translated->get_name(),
+				operator_2_translated->get_name());
+		}
+		else if (tot_op == 1)
+		{
+			EU::get_instancia()->process(instr_translated->get_name(),
+				operator_1_translated->get_name());
+		}
+		else
+		{
+			EU::get_instancia()->process(instr_translated->get_name());
 		}
 	}
-
-	EU::get_instancia()->process(instr_translated->get_name(),
-		operator_1_translated->get_name(),
-		operator_2_translated->get_name());
 }
 
 DECODER::DECODER()

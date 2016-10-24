@@ -53,3 +53,23 @@ void EU::process(std::string op, std::string reg_1, std::string reg_2)
 
 	instruction_Set::get_instancia()->execute_instruction(op, r1, r2);
 }
+
+void EU::process(std::string op, std::string reg_1)
+{
+	REGISTER* r1 = nullptr;
+	for (auto it = this->main_registers.cbegin(); it != this->main_registers.cend(); ++it)
+	{
+		if ((*it)->get_name().compare(reg_1) == 0)
+		{
+			r1 = *it;
+			break;
+		}
+	}
+
+	instruction_Set::get_instancia()->execute_instruction(op, r1);
+}
+
+void EU::process(std::string op)
+{
+	instruction_Set::get_instancia()->execute_instruction(op);
+}
