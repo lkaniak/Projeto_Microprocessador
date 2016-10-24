@@ -20,19 +20,6 @@ instruction_Set::instruction_Set()
 {
     this->load_instructions();
     this->load_operators();
-
-	// Populate MAP
-	map_FnPtr_RegReg->insert (
-		{"MOV", mov},
-		{"ADD", add}
-	);
-
-	map_FnPtr_RegInt = {
-		{"MOV", mov}
-	}
-
-
-
 }
 
 
@@ -42,7 +29,80 @@ instruction_Set::~instruction_Set()
 
 void instruction_Set::execute_instruction(std::string op, REGISTER * r1, REGISTER * r2)
 {
-	this->add(r1, r2);
+	if (op.compare("MOV") == 0)
+		this->mov(r1, r2);
+	else if (op.compare("ADD") == 0)
+		this->add(r1, r2);
+	else if (op.compare("SUB") == 0)
+		this->sub(r1, r2);
+	else if (op.compare("DIV") == 0)
+		this->div(r1, r2);
+	else if (op.compare("MUL") == 0)
+		this->mul(r1, r2);
+	else
+		throw std::runtime_error("Instruction Not Found");
+}
+
+void instruction_Set::execute_instruction(std::string op, REGISTER * r1)
+{
+	if (op.compare("CMP") == 0)
+		this->cmp(r1);
+	else if (op.compare("AND") == 0)
+		this->_and(r1);
+	else if (op.compare("OR") == 0)
+		this->_or(r1);
+	else if (op.compare("XOR") == 0)
+		this->_xor(r1);
+	else if (op.compare("PUSH") == 0)
+		this->push(r1);
+	else if (op.compare("POP") == 0)
+		this->pop(r1);
+	else if (op.compare("NOT") == 0)
+		this->_not(r1);
+	else if (op.compare("INC") == 0)
+		this->inc(r1);
+	else if (op.compare("DEC") == 0)
+		this->dec(r1);
+	else if (op.compare("LOAD") == 0)
+		this->load(r1);
+	else if (op.compare("STORE") == 0)
+		this->store(r1);
+	else if (op.compare("INT") == 0)
+		this->interrupt(r1);
+	else if (op.compare("JMP") == 0)
+		this->jmp(r1);
+	else if (op.compare("JG") == 0)
+		this->jg(r1);
+	else if (op.compare("JE") == 0)
+		this->je(r1);
+	else if (op.compare("JNE") == 0)
+		this->jne(r1);
+	else if (op.compare("JL") == 0)
+		this->jl(r1);
+	else if (op.compare("JZ") == 0)
+		this->jz(r1);
+	else if (op.compare("JNZ") == 0)
+		this->jnz(r1);
+	else if (op.compare("JA") == 0)
+		this->ja(r1);
+	else if (op.compare("JB") == 0)
+		this->jb(r1);
+	else if (op.compare("RET") == 0)
+		this->ret(r1);
+	else if (op.compare("CALL") == 0)
+		this->call(r1);
+	else
+		throw std::runtime_error("Instruction Not Found");
+}
+
+void instruction_Set::execute_instruction(std::string op)
+{
+	if (op.compare("START") == 0)
+		this->start();
+	else if (op.compare("END") == 0)
+		this->end();
+	else
+		throw std::runtime_error("Instruction Not Found");
 }
 
 void instruction_Set::load_instructions()
@@ -149,11 +209,16 @@ void instruction_Set::execute_instruction(instruction_line op)
 
 void instruction_Set::mov(REGISTER *r1, REGISTER *r2)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, r2);
 }
 
 void instruction_Set::mov(REGISTER *r1, int num)
 {
-	
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	//bus->transfer(r1, num);
 }
 
 void instruction_Set::add(REGISTER *r1, REGISTER *r2)
@@ -162,35 +227,66 @@ void instruction_Set::add(REGISTER *r1, REGISTER *r2)
 	auto bus = BUS::get_instancia();
 	bus->transfer(r1, alu->get_first());
 	bus->transfer(r2, alu->get_second());
-	alu->execute();
+	alu->execute(r1, '+');
 }
 
 void instruction_Set::sub(REGISTER *r1, REGISTER *r2)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	bus->transfer(r2, alu->get_second());
+	alu->execute(r1, '-');
 }
 
 void instruction_Set::div(REGISTER *r1, REGISTER *r2)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	bus->transfer(r2, alu->get_second());
+	alu->execute(r1, '/');
 }
 
 void instruction_Set::mul(REGISTER *r1, REGISTER *r2)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	bus->transfer(r2, alu->get_second());
+	alu->execute(r1, '*');
 }
 
 void instruction_Set::cmp(REGISTER *r1)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	alu->execute(r1, 'c');
 }
 
 void instruction_Set:: _and(REGISTER *r1)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	alu->execute(r1, '&');
 }
 
 void instruction_Set:: _or(REGISTER *r1)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	alu->execute(r1, '|');
 }
 
 void instruction_Set:: _xor(REGISTER *r1)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	alu->execute(r1, 'x');
 }
 
 void instruction_Set::push(REGISTER *r1)
@@ -203,14 +299,26 @@ void instruction_Set::pop(REGISTER *r1)
 
 void instruction_Set::_not(REGISTER *r1)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	alu->execute(r1, '~');
 }
 
 void instruction_Set::inc(REGISTER *r1)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	alu->execute(r1, '+');
 }
 
 void instruction_Set::dec(REGISTER *r1)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	alu->execute(r1, '-');
 }
 
 void instruction_Set::load(REGISTER *r1)

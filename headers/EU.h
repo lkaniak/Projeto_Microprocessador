@@ -9,6 +9,7 @@ class EU
 private:
 	static EU* instancia;
 	std::vector<REGISTER*> main_registers;
+	REGISTER *aux;
 
 	EU();
 	~EU();
@@ -18,5 +19,10 @@ public:
 	void process(std::string op, std::string reg_1, std::string reg_2);
 	void process(std::string op, std::string reg_1);
 	void process(std::string op);
+
+	REGISTER *get_aux();
+
+	// TEMP!!! DELETE!!!
+	std::vector<REGISTER*> get_reg() { return main_registers; }
 };
 

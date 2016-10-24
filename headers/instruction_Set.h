@@ -13,7 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include <map>
-#include <functional>
+#include <utility>
 
 #include "utils.h"
 #include "instruction_line.h"
@@ -26,6 +26,8 @@
 class instruction_Set
 {
 private:
+	
+
     static instruction_Set *instancia;
 	instruction_Set();
 	~instruction_Set();
@@ -34,11 +36,6 @@ private:
     std::vector<Instruction*> instructions;
     // Vetor de registradores
     std::vector<Instruction*> operators;
-	// Map de instrucoes
-	std::map<std::string, std::function<void(REGISTER *, REGISTER *)>> *map_FnPtr_RegReg;
-	std::map<std::string, std::function<void(REGISTER *, int)>> *map_FnPtr_RegInt;
-	std::map<std::string, std::function<void(REGISTER *)>> *map_FnPtr_Reg;
-	std::map<std::string, std::function<void()>> *map_FnPtr_Null;
         
     void load_instructions();
     void load_operators();

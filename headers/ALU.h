@@ -1,6 +1,9 @@
 #pragma once
+
 #include "Instruction.h"
 #include "REGISTER.h"
+#include "BUS.h"
+#include "FLAGS.h"
 
 class ALU
 {
@@ -16,7 +19,7 @@ public:
 	
 	static ALU* get_instancia();
 
-	void execute();
+	void execute(REGISTER *result, char op);
 	void set_first(int val);
 	void set_second(int val);
 	int get_result();

@@ -5,8 +5,8 @@ EU *EU::instancia = nullptr;
 EU::EU()
 {
 	// TESTE
-	this->main_registers.push_back(new REGISTER("RB", 2));
-	this->main_registers.push_back(new REGISTER("RD", 3));
+	this->main_registers.push_back(new REGISTER("RB", 10));
+	this->main_registers.push_back(new REGISTER("RD", 2));
 	// FIM TESTE
 
 	this->main_registers.push_back(new REGISTER("RA"));
@@ -72,4 +72,9 @@ void EU::process(std::string op, std::string reg_1)
 void EU::process(std::string op)
 {
 	instruction_Set::get_instancia()->execute_instruction(op);
+}
+
+REGISTER * EU::get_aux()
+{
+	return this->aux;
 }
