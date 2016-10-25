@@ -27,5 +27,6 @@ public:
     std::string get_name();
     std::string get_operator_1() const;
     std::string get_operator_2() const;
+	int num_operands();
 };
 

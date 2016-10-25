@@ -89,3 +89,19 @@ std::string instruction_line::get_operator_2() const
     }
     return "";
 }
+
+int instruction_line::num_operands()
+{
+	if (this->operator_1 == nullptr && this->operator_2 == nullptr)
+	{
+		return 0;
+	}
+	else if (this->operator_1 == nullptr || this->operator_2 == nullptr)
+	{
+		return 1;
+	}
+	else
+	{
+		return 2;
+	}
+}

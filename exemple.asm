@@ -1,5 +1,6 @@
 START
    MOV RA,10
+   MOV RA,RB
    MOV RB,CINCO
    ADD RA,RB
    DIV RA,RB

@@ -34,9 +34,9 @@ std::string Parser::dec_to_bin(const int dec_num)
     return std::bitset<8>(dec_num).to_string();
 }
 
-std::string Parser::get_instruction_opcode(const std::string op)
+std::string Parser::get_instruction_opcode(const std::string op, int n_operators)
 {
-    auto instruc = this->instancia_instruction_Set->get_operation_info(op);
+    auto instruc = this->instancia_instruction_Set->get_operation_info(op,n_operators);
         if (instruc != nullptr)
         {
             return instruc->get_opcode();
@@ -66,7 +66,8 @@ std::string Parser::get_symbol_opcode(const std::string op)
 
 bool Parser::is_operator(const std::string op)
 {
-    auto instruc = this->instancia_instruction_Set->get_operation_info(op);
+	//modificacao
+    auto instruc = this->instancia_instruction_Set->get_operation_info(op,-1);
     if (instruc != nullptr && instruc->get_num_operators() == -1)
     {
         return true;
@@ -76,7 +77,8 @@ bool Parser::is_operator(const std::string op)
 
 bool Parser::is_valid_symbol(const std::string op, const int num_op)
 {
-    auto instruc = this->instancia_instruction_Set->get_operation_info(op);
+	//modificacao
+    auto instruc = this->instancia_instruction_Set->get_operation_info(op,num_op);
     if (instruc != nullptr)
     {
         if (instruc->get_num_operators() == num_op || instruc->get_num_operators() == -1)
@@ -89,8 +91,20 @@ bool Parser::is_valid_symbol(const std::string op, const int num_op)
 
 void Parser::add_instruction(const std::string inst, const std::string op1, const std::string op2, const int line)
 {
-    auto _op1 = this->instancia_instruction_Set->get_operation_info(op1);
-    auto _op2 = this->instancia_instruction_Set->get_operation_info(op2);
+	//modificacao
+	int table_size = (this->instruction_table.size() - 1);
+	bool empty = this->instruction_table.empty();
+	Instruction *_op1, *_op2;
+	if (!empty)
+	{
+		_op1 = this->instancia_instruction_Set->get_operation_info(op1, this->instruction_table[table_size]->num_operands());
+		_op2 = this->instancia_instruction_Set->get_operation_info(op2, this->instruction_table[table_size]->num_operands());
+	}
+	else
+	{
+		_op1 = this->instancia_instruction_Set->get_operation_info(op1, -1);
+		_op2 = this->instancia_instruction_Set->get_operation_info(op2, -1);
+	}
     if (_op2 != nullptr && _op1 != nullptr)
     {
         this->instruction_table.push_back(new instruction_line(inst, _op1,_op2, line, int(instruction_table.size())));
@@ -292,12 +306,18 @@ void Parser::translate_code()
 
 	for (auto i_symbol = 0; i_symbol < this->instruction_table.size(); i_symbol++)
 	{
+		//modificacao
 		std::string op_code;
-		op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_name());
+		op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_name(),
+					this->instruction_table[i_symbol]->num_operands());
 		obj_file << op_code;
-		op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_operator_1());
+
+		op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_operator_1(),
+					this->instruction_table[i_symbol]->num_operands());
 		obj_file << op_code;
-		op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_operator_2());
+
+		op_code = this->get_instruction_opcode(this->instruction_table[i_symbol]->get_operator_2(),
+					this->instruction_table[i_symbol]->num_operands());
 		obj_file << op_code;
 	}
 

@@ -150,13 +150,18 @@ void instruction_Set::load_operators()
     std::cout << "Done." << std::endl;
 }
 
-Instruction *instruction_Set::get_operation_info(const std::string name)
+Instruction *instruction_Set::get_operation_info(const std::string name, int num_operators)
 {
     // Verifica tabela de instrucoes
     for (auto i = 0; i < this->instructions.size(); i++)
     {
         if (this->instructions[i]->get_name() == name)
         {
+			//modificação
+			if (name == "MOV" && num_operators == 1)
+			{
+				i++;
+			}
             return this->instructions[i];
         }
         
