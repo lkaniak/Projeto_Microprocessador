@@ -24,16 +24,85 @@ instruction_Set::instruction_Set()
 
 
 instruction_Set::~instruction_Set()
-{/*
-    for(auto it = this->operators.begin(); it !=  this->operators.end(); it++)
-    {
-        delete it;
-    }
-    for(auto it = this->instructions.begin(); it !=  this->instructions.end(); it++)
-    {
-        delete it;
-    }
-   */ 
+{
+}
+
+void instruction_Set::execute_instruction(std::string op, REGISTER * r1, REGISTER * r2)
+{
+	if (op.compare("MOV") == 0)
+		this->mov(r1, r2);
+	else if (op.compare("ADD") == 0)
+		this->add(r1, r2);
+	else if (op.compare("SUB") == 0)
+		this->sub(r1, r2);
+	else if (op.compare("DIV") == 0)
+		this->div(r1, r2);
+	else if (op.compare("MUL") == 0)
+		this->mul(r1, r2);
+	else
+		throw std::runtime_error("Instruction Not Found");
+}
+
+void instruction_Set::execute_instruction(std::string op, REGISTER * r1)
+{
+	if (op.compare("CMP") == 0)
+		this->cmp(r1);
+	else if (op.compare("AND") == 0)
+		this->_and(r1);
+	else if (op.compare("OR") == 0)
+		this->_or(r1);
+	else if (op.compare("XOR") == 0)
+		this->_xor(r1);
+	else if (op.compare("PUSH") == 0)
+		this->push(r1);
+	else if (op.compare("POP") == 0)
+		this->pop(r1);
+	else if (op.compare("NOT") == 0)
+		this->_not(r1);
+	else if (op.compare("INC") == 0)
+		this->inc(r1);
+	else if (op.compare("DEC") == 0)
+		this->dec(r1);
+	else if (op.compare("LOAD") == 0)
+		this->load(r1);
+	else if (op.compare("STORE") == 0)
+		this->store(r1);
+	else if (op.compare("INT") == 0)
+		this->interrupt(r1);
+	else if (op.compare("JMP") == 0)
+		this->jmp(r1);
+	else if (op.compare("JG") == 0)
+		this->jg(r1);
+	else if (op.compare("JE") == 0)
+		this->je(r1);
+	else if (op.compare("JNE") == 0)
+		this->jne(r1);
+	else if (op.compare("JL") == 0)
+		this->jl(r1);
+	else if (op.compare("JZ") == 0)
+		this->jz(r1);
+	else if (op.compare("JNZ") == 0)
+		this->jnz(r1);
+	else if (op.compare("JA") == 0)
+		this->ja(r1);
+	else if (op.compare("JB") == 0)
+		this->jb(r1);
+	else if (op.compare("RET") == 0)
+		this->ret(r1);
+	else if (op.compare("CALL") == 0)
+		this->call(r1);
+	else
+		throw std::runtime_error("Instruction Not Found");
+}
+
+void instruction_Set::execute_instruction(std::string op)
+{
+	if (op.compare("START") == 0)
+		this->start();
+	else if (op.compare("END") == 0)
+		this->end();
+	else
+		throw std::runtime_error("Instruction Not Found");
 }
 
 void instruction_Set::load_instructions()
@@ -110,134 +179,206 @@ Instruction *instruction_Set::get_operation_info(const std::string name, int num
     return nullptr;
 }
 
+Instruction *instruction_Set::get_operation_name(const std::string opcode)
+{
+	// Verifica tabela de instrucoes
+	for (auto i = 0; i < this->instructions.size(); i++)
+	{
+		if (this->instructions[i]->get_opcode() == opcode)
+		{
+			return this->instructions[i];
+		}
+
+	}
+
+	// Verifica tabela de registradores
+	for (auto i = 0; i < this->operators.size(); i++)
+	{
+		if (this->operators[i]->get_opcode() == opcode)
+		{
+			return this->operators[i];
+		}
+	}
+
+	return nullptr;
+}
+
 //////////////////////////////////////
 //  LISTA DE INSTRUCOES COMECA AQUI //
 //////////////////////////////////////
-void instruction_Set::execute_instruction(instruction_line op)
-{
-
-}
 /*
 void instruction_Set::execute_instruction(instruction_line op)
 {
 
 }*/
 
-void instruction_Set::mov(Operator r1, Operator r2)
+void instruction_Set::mov(REGISTER *r1, REGISTER *r2)
 {
-	r1.get_op_code() = r2.get_op_code();
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, r2);
 }
 
-void instruction_Set::mov(Operator r1, int num)
+void instruction_Set::mov(REGISTER *r1, int num)
 {
-	
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	//bus->transfer(r1, num);
 }
 
-void instruction_Set::add(Operator r1, Operator r2)
+void instruction_Set::add(REGISTER *r1, REGISTER *r2)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	bus->transfer(r2, alu->get_second());
+	alu->execute(r1, '+');
 }
 
-void instruction_Set::sub(Operator r1, Operator r2)
+void instruction_Set::sub(REGISTER *r1, REGISTER *r2)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	bus->transfer(r2, alu->get_second());
+	alu->execute(r1, '-');
 }
 
-void instruction_Set::div(Operator r1, Operator r2)
+void instruction_Set::div(REGISTER *r1, REGISTER *r2)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	bus->transfer(r2, alu->get_second());
+	alu->execute(r1, '/');
 }
 
-void instruction_Set::mul(Operator r1, Operator r2)
+void instruction_Set::mul(REGISTER *r1, REGISTER *r2)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	bus->transfer(r2, alu->get_second());
+	alu->execute(r1, '*');
 }
 
-void instruction_Set::cmp(Operator r1)
+void instruction_Set::cmp(REGISTER *r1)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	alu->execute(r1, 'c');
 }
 
-void instruction_Set:: _and(Operator r1)
+void instruction_Set:: _and(REGISTER *r1)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	alu->execute(r1, '&');
 }
 
-void instruction_Set:: _or(Operator r1)
+void instruction_Set:: _or(REGISTER *r1)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	alu->execute(r1, '|');
 }
 
-void instruction_Set:: _xor(Operator r1)
+void instruction_Set:: _xor(REGISTER *r1)
 {
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	alu->execute(r1, 'x');
 }
 
-void instruction_Set::push(Operator r1)
-{
-}
-
-void instruction_Set::pop(Operator r1)
-{
-}
-
-void instruction_Set::_not(Operator r1)
-{
-}
-
-void instruction_Set::inc(Operator r1)
-{
-}
-
-void instruction_Set::dec(Operator r1)
-{
-}
-
-void instruction_Set::load(Operator r1)
-{
-}
-
-void instruction_Set::store(Operator r1)
-{
-}
-
-void instruction_Set::interrupt(Operator r1)
-{
-}
-
-void instruction_Set::jmp(Operator r1)
-{
-}
-
-void instruction_Set::jg(Operator r1)
-{
-}
-
-void instruction_Set::je(Operator r1)
-{
-}
-
-void instruction_Set::jne(Operator r1)
+void instruction_Set::push(REGISTER *r1)
 {
 }
 
-void instruction_Set::jl(Operator r1)
+void instruction_Set::pop(REGISTER *r1)
 {
 }
 
-void instruction_Set::jz(Operator r1)
+void instruction_Set::_not(REGISTER *r1)
+{
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	alu->execute(r1, '~');
+}
+
+void instruction_Set::inc(REGISTER *r1)
+{
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	alu->execute(r1, '+');
+}
+
+void instruction_Set::dec(REGISTER *r1)
+{
+	auto alu = ALU::get_instancia();
+	auto bus = BUS::get_instancia();
+	bus->transfer(r1, alu->get_first());
+	alu->execute(r1, '-');
+}
+
+void instruction_Set::load(REGISTER *r1)
 {
 }
 
-void instruction_Set::jnz(Operator r1)
+void instruction_Set::store(REGISTER *r1)
 {
 }
 
-void instruction_Set::ja(Operator r1)
+void instruction_Set::interrupt(REGISTER *r1)
 {
 }
 
-void instruction_Set::jb(Operator r1)
+void instruction_Set::jmp(REGISTER *r1)
 {
 }
 
-void instruction_Set::ret(Operator r1)
+void instruction_Set::jg(REGISTER *r1)
 {
 }
 
-void instruction_Set::call(Operator r1)
+void instruction_Set::je(REGISTER *r1)
+{
+}
+
+void instruction_Set::jne(REGISTER *r1)
+{
+}
+
+void instruction_Set::jl(REGISTER *r1)
+{
+}
+
+void instruction_Set::jz(REGISTER *r1)
+{
+}
+
+void instruction_Set::jnz(REGISTER *r1)
+{
+}
+
+void instruction_Set::ja(REGISTER *r1)
+{
+}
+
+void instruction_Set::jb(REGISTER *r1)
+{
+}
+
+void instruction_Set::ret(REGISTER *r1)
+{
+}
+
+void instruction_Set::call(REGISTER *r1)
 {
 }
 

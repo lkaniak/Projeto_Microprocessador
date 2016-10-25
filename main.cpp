@@ -11,6 +11,10 @@
 #include <vector>
 #include <exception>
 
+#include "headers/DECODER.h"
+#include "headers/MEMORY.h"
+#include "headers/EU.h"
+
 int main(int argc, char** argv)
 {
     auto parser = Parser::get_instancia();
@@ -30,6 +34,15 @@ int main(int argc, char** argv)
 	}
     
     
+
+	/////////TESTE//////////////
+	auto mem = new MEMORY();
+	auto dec = DECODER::get_instancia();
+	dec->decode("01000111");
+	auto eu = EU::get_instancia()->get_reg();
+	for (auto it = eu.cbegin(); it != eu.cend(); ++it)
+		std::cout << (*it)->get_value();
+	///////REMOVER//////////////
     return 0;
 }
 

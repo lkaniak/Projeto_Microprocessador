@@ -5,13 +5,15 @@
 class FLAGS
 {
 private:
-	std::map<std::string, bool> flags;
-
-public:
+	static FLAGS* instancia;
 	FLAGS();
 	~FLAGS();
+	std::map<int, bool> flags;
 
-	void set_flag(int flag);
+public:
+	static FLAGS* get_instancia();
+
+	void set_flag(int flag, bool r);
 	bool get_flag(int flag);
 };
 
