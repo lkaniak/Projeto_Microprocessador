@@ -8,10 +8,16 @@ class QUEUE
 {
 private:
 	std::vector<Instruction> instructions;
+	int size;
+	int max;
 
 public:
 	QUEUE();
+	QUEUE(int max_size);
 	~QUEUE();
 
-	std::string load();
+	bool is_full();
+	bool is_empty();
+	void load(Instruction Instr);
+	void fill_queue();
 };
