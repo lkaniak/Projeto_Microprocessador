@@ -5,8 +5,6 @@
  * Created on August 28, 2016, 10:19 AM
  */
 
-#define build_file "./build/temp.obj"
-
 #include "./../headers/parser.h"
 Parser *Parser::instancia = nullptr;
 
@@ -262,7 +260,7 @@ void Parser::check_sintax(std::ifstream &source_file)
             }
         }
     }
-    this->instruction_table.pop_back();
+    //this->instruction_table.pop_back();
     // Pega as constantes no final do arquivo
     while (!source_file.eof())
     {
@@ -292,17 +290,17 @@ void Parser::check_sintax(std::ifstream &source_file)
     }
 }
 
-void Parser::translate_code()
+void Parser::translate_code(std::string build_file)
 {
 	struct stat info;
 
-	if (stat("./build", &info) != 0)
+	if (stat(build_file.c_str(), &info) != 0)
 	{
-		throw std::runtime_error("Folder './build' does not exist!");
+		throw std::runtime_error("Folder " + build_file + " does not exist!");
 	}
 	// Segunda passada
 	std::ofstream obj_file;
-	obj_file.open(build_file);
+	obj_file.open(build_file + "/build.obj");
 
 	for (auto i_symbol = 0; i_symbol < this->instruction_table.size(); i_symbol++)
 	{
@@ -326,11 +324,11 @@ void Parser::translate_code()
 	std::cout << "Done" << std::endl;
 }
 
-std::string Parser::make_object(std::ifstream &source_file)
+std::string Parser::make_object(std::ifstream &source_file, std::string output_file)
 {
     std::cout << std::endl << "Checking for sintax errors:" << std::endl;
     this->check_sintax(source_file);
-	this->translate_code();
+	this->translate_code(output_file);
 	utils::get_instancia()->generate_csv(&this->symbol_table, &this->instruction_table);
     std::cout << "Ok" << std::endl;
     return "";

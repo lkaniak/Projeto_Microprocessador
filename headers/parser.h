@@ -56,11 +56,11 @@ private:
     void add_symbol(const std::string si, const int val);
 
     void check_sintax(std::ifstream &source_file);
-	void translate_code();
+	void translate_code(std::string build_file);
     
 public:
     static Parser *get_instancia();
-    std::string make_object(std::ifstream &source_file);
+    std::string make_object(std::ifstream &source_file, std::string output_file);
 	std::vector<instruction_line*> get_intruction_table();
 	vecPair_StrInt get_symbol_table();
     ~Parser();

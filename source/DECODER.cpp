@@ -1,24 +1,14 @@
 #include "..\headers\DECODER.h"
 
-DECODER *DECODER::instancia = nullptr;
-
-DECODER * DECODER::get_instancia()
-{
-	if (!instancia)
-	{
-		instancia = new DECODER();
-	}
-
-	return instancia;
-}
-
-void DECODER::decode(std::string instruction)
+std::vector<Instruction*> DECODER::decode(std::string instruction)
 {
 	std::string opcode;
 	auto inst_set = instruction_Set::get_instancia();
 	Instruction *instr_translated = nullptr;
 	Instruction *operator_1_translated = nullptr;
 	Instruction *operator_2_translated = nullptr;
+
+	std::vector<Instruction*> instruction_decoded;
 
 	//Pega a instrucao
 	for (auto o : instruction)
@@ -28,7 +18,10 @@ void DECODER::decode(std::string instruction)
 		{
 			instr_translated = inst_set->get_operation_name(opcode);
 			if (instr_translated != nullptr)
+			{
+				instruction_decoded.push_back(instr_translated);
 				break;
+			}
 		}
 	}
 
@@ -44,33 +37,19 @@ void DECODER::decode(std::string instruction)
 			opcode += o;
 			if (operator_1_translated == nullptr && opcode.size() == 2)
 			{
-				operator_1_translated = inst_set->get_operation_name(opcode);
+				instruction_decoded.push_back(inst_set->get_operation_name(opcode));
 				opcode = "";
 			}
 			else if (tot_op == 2 && opcode.size() == 2)
 			{
-				operator_2_translated = inst_set->get_operation_name(opcode);
+				instruction_decoded.push_back(inst_set->get_operation_name(opcode));
 
 				break;
 			}
 		}
-
-		if (tot_op == 2)
-		{
-			EU::get_instancia()->process(instr_translated->get_name(),
-				operator_1_translated->get_name(),
-				operator_2_translated->get_name());
-		}
-		else if (tot_op == 1)
-		{
-			EU::get_instancia()->process(instr_translated->get_name(),
-				operator_1_translated->get_name());
-		}
-		else
-		{
-			EU::get_instancia()->process(instr_translated->get_name());
-		}
 	}
+
+	return instruction_decoded;
 }
 
 DECODER::DECODER()

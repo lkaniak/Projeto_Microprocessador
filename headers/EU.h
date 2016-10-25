@@ -2,8 +2,10 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+
 #include "REGISTER.h"
 #include "instruction_Set.h"
+
 class EU
 {
 private:
@@ -21,8 +23,5 @@ public:
 	void process(std::string op);
 
 	REGISTER *get_aux();
-
-	// TEMP!!! DELETE!!!
-	std::vector<REGISTER*> get_reg() { return main_registers; }
 };
 
