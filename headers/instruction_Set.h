@@ -75,7 +75,7 @@ public:
 
     void execute_instruction(instruction_line op);
     //void execute_instruction(instruction_line op);
-    Instruction *get_operation_info(const std::string name);
+    Instruction *get_operation_info(const std::string name, int num_operators);
 };
 
 #endif /* INSTRUCTION_SET_H */
