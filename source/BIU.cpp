@@ -16,6 +16,8 @@ BIU::BIU()
 {
 	this->ip = new REGISTER("ip");
 	this->memory = new MEMORY(255);
+	this->decoder = new DECODER();
+	this->queue = new QUEUE();
 }
 
 

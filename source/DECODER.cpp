@@ -35,12 +35,12 @@ std::vector<Instruction*> DECODER::decode(std::string instruction)
 		for (auto o : instruction)
 		{
 			opcode += o;
-			if (operator_1_translated == nullptr && opcode.size() == 2)
+			if (instruction_decoded.size() == 1 && opcode.size() == 2)
 			{
 				instruction_decoded.push_back(inst_set->get_operation_name(opcode));
 				opcode = "";
 			}
-			else if (tot_op == 2 && opcode.size() == 2)
+			else if (instruction_decoded.size() == 2 && opcode.size() == 2)
 			{
 				instruction_decoded.push_back(inst_set->get_operation_name(opcode));
 

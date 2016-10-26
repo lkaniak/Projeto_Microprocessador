@@ -60,7 +60,10 @@ std::string QUEUE::get_instruction()
 	else 
 	{
 		this->fill();
+		Instr = this->get_instruction();
 	}
+
+	return Instr;
 }
 
 void QUEUE::fill()
