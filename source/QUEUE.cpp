@@ -39,7 +39,7 @@ bool QUEUE::is_empty()
 	}
 }
 
-void QUEUE::load(Instruction Instr)
+void QUEUE::load(std::string Instr)
 {
 	if (!is_full())
 	{
@@ -48,13 +48,45 @@ void QUEUE::load(Instruction Instr)
 	}
 }
 
-void QUEUE::fill_queue()
+std::string QUEUE::get_instruction()
+{
+	std::string Instr;
+	if (!this->is_empty())
+	{
+		Instr = this->instructions.front();
+		this->instructions.erase(this->instructions.begin());
+		this->size--;
+	}
+	else 
+	{
+		throw std::runtime_error("invalid queue access!");
+	}
+}
+
+void QUEUE::fill()
 {
 	//load(instr);
 	while (!this->is_full())
 	{
-		fill_queue();
+		fill();
 	}
+}
+
+void QUEUE::clear()
+{
+	if (!this->is_empty())
+	{
+		while (!this->is_empty())
+		{
+			this->instructions.pop_back();
+			this->size--;
+		}
+	}
+	else
+	{
+		//throw std::runtime_error("queue already empty.");
+	}
+	
 }
 
 

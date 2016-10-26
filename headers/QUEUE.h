@@ -7,7 +7,7 @@
 class QUEUE
 {
 private:
-	std::vector<Instruction> instructions;
+	std::vector<std::string> instructions;
 	int size;
 	int max;
 
@@ -18,6 +18,8 @@ public:
 
 	bool is_full();
 	bool is_empty();
-	void load(Instruction Instr);
-	void fill_queue();
+	void load(std::string Instr);
+	std::string get_instruction();	//FIFO
+	void fill();
+	void clear();
 };
