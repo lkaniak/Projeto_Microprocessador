@@ -47,9 +47,10 @@ void run(std::vector<std::string> commands, int size)
 	try
 	{ 
 		auto bui = new BIU(&programa);
-		while (true)
+		auto end = false;
+		while (!end)
 		{
-			bui->execute();
+			end = bui->execute();
 		}
 	}
 	catch (std::exception &e)

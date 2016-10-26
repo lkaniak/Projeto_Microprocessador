@@ -19,6 +19,8 @@ public:
 	BIU(std::ifstream *file);
 	~BIU();
 
-	void execute();
+	bool execute();
+	int increment_ip();
+	int get_ip();
 };
 

@@ -14,13 +14,15 @@ BIU::~BIU()
 {
 }
 
-void BIU::execute()
+bool BIU::execute()
 {
 	//auto instruction = queue->load();
-	auto instruction = "00100111";
+	auto instruction = "";
 	auto decoded_instruction = decoder->decode(instruction);
 
-	if (decoded_instruction.size() == 3)
+	if (decoded_instruction[0]->get_name().compare("END") == 0)
+		return true;
+	else if (decoded_instruction.size() == 3)
 	{
 		EU::get_instancia()->process(decoded_instruction[0]->get_name(),
 			decoded_instruction[1]->get_name(),
@@ -37,5 +39,19 @@ void BIU::execute()
 	}
 
 	// Incrementa IP em 1
+	this->increment_ip();
+
+	return false;
+
+}
+
+int BIU::increment_ip()
+{
 	this->ip->set_value(ip->get_value() + 1);
+	return ip->get_value();
+}
+
+int BIU::get_ip()
+{
+	return ip->get_value();
 }

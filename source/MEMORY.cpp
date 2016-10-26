@@ -23,15 +23,24 @@ void MEMORY::load_file(std::ifstream *binary_file)
 		binary_file->read(line, 4);
 		std::string instr(line, 4);
 
-		if (instr.compare("0001") != 0)
+		// Se forem instrucoes que nao aceitam imediato
+		if (instr.compare("0001") != 0 && instr.find("101") != 0)
 		{
 			binary_file->read(line, 4);
 			instr += line;
-			instr[8] = '\0';
+			// Se for unico jmp que nao tem como distinguir com 4 bits
+			if (instr.find("110000") != 0)
+				instr[8] = '\0';
+			else
+			{
+				binary_file->read(line, 6);
+				instr[14] = '\0';
+			}
 
 			this->memory.push_back(instr);
 		}
-		else
+		// Instrucoes que aceitam imediato
+		else if (instr.compare("") != 0)
 		{
 			binary_file->read(line, 10);
 			instr += line;

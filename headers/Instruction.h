@@ -21,7 +21,6 @@ public:
     std::string get_name() const;
     std::string get_opcode() const;
     int get_num_operators() const;
-
 };
 
 #endif /* INSTRUCTION_H */
