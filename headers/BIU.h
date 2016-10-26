@@ -10,18 +10,22 @@
 class BIU
 {
 private:
+	static BIU* instancia;
+
 	REGISTER *ip;
 	MEMORY *memory;
 	QUEUE *queue;
 	DECODER *decoder;
-
-public:
-	BIU(std::ifstream *file);
+	
+	BIU();
 	~BIU();
+public:
+	static BIU* get_instancia();
 
 	bool execute();
 	int increment_ip();
-	int set_ip(int new_ip);
-	int get_ip();
+	int set_ip_value(int new_ip);
+	int get_ip_value();
+	void load_file(std::ifstream *file);
 };
 

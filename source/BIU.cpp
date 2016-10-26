@@ -1,12 +1,21 @@
 #include "../headers/BIU.h"
 
+BIU *BIU::instancia = nullptr;
 
+BIU *BIU::get_instancia()
+{
+	if (!instancia)
+	{
+		instancia = new BIU();
+	}
 
-BIU::BIU(std::ifstream *file)
+	return instancia;
+}
+
+BIU::BIU()
 {
 	this->ip = new REGISTER("ip");
 	this->memory = new MEMORY(255);
-	this->memory->load_file(file);
 }
 
 
@@ -50,14 +59,19 @@ int BIU::increment_ip()
 	return ip->get_value();
 }
 
-int BIU::set_ip(int new_ip)
+int BIU::set_ip_value(int new_ip)
 {
 	ip->set_value(new_ip);
 	queue->clear();
 	return ip->get_value();
 }
 
-int BIU::get_ip()
+int BIU::get_ip_value()
 {
 	return ip->get_value();
+}
+
+void BIU::load_file(std::ifstream * file)
+{
+	this->memory->load_file(file);
 }

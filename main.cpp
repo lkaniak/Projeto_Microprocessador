@@ -46,11 +46,12 @@ void run(std::vector<std::string> commands, int size)
 	}
 	try
 	{ 
-		auto bui = new BIU(&programa);
+		auto biu = BIU::get_instancia();
+		biu->load_file(&programa);
 		auto end = false;
 		while (!end)
 		{
-			end = bui->execute();
+			end = biu->execute();
 		}
 	}
 	catch (std::exception &e)
