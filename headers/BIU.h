@@ -21,6 +21,7 @@ public:
 
 	bool execute();
 	int increment_ip();
+	int set_ip(int new_ip);
 	int get_ip();
 };
 

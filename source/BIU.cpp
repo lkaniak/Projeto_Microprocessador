@@ -16,8 +16,7 @@ BIU::~BIU()
 
 bool BIU::execute()
 {
-	//auto instruction = queue->load();
-	auto instruction = "";
+	auto instruction = queue->get_instruction();
 	auto decoded_instruction = decoder->decode(instruction);
 
 	if (decoded_instruction[0]->get_name().compare("END") == 0)
@@ -48,6 +47,13 @@ bool BIU::execute()
 int BIU::increment_ip()
 {
 	this->ip->set_value(ip->get_value() + 1);
+	return ip->get_value();
+}
+
+int BIU::set_ip(int new_ip)
+{
+	ip->set_value(new_ip);
+	queue->clear();
 	return ip->get_value();
 }
 
