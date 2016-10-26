@@ -7,6 +7,8 @@
 #include "STACK.h"
 #include "DECODER.h"
 
+class QUEUE;
+
 class BIU
 {
 private:

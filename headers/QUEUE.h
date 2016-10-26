@@ -4,6 +4,7 @@
 
 #include "Instruction.h"
 
+class BIU;
 
 class QUEUE
 {
