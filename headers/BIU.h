@@ -14,7 +14,7 @@ class BIU
 private:
 	static BIU* instancia;
 
-	REGISTER *ip;
+	static REGISTER *ip;
 	MEMORY *memory;
 	QUEUE *queue;
 	DECODER *decoder;
@@ -27,7 +27,7 @@ public:
 	bool execute();
 	int increment_ip();
 	int set_ip_value(int new_ip);
-	int get_ip_value();
+	static int get_ip_value();
 	void load_file(std::ifstream *file);
 };
 

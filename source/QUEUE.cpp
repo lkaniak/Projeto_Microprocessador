@@ -77,7 +77,7 @@ void QUEUE::fill(int start_ip)
 
 void QUEUE::clear()
 {
-	auto ip = BIU::get_ip();
+	auto ip = BIU::get_ip_value();
 	if (!this->is_empty())
 	{
 		while (!this->is_empty())
