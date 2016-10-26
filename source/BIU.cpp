@@ -75,3 +75,9 @@ void BIU::load_file(std::ifstream * file)
 {
 	this->memory->load_file(file);
 }
+
+std::string BIU::get_address_from_memory_with_ip()
+{
+	return memory->load_from_address(this->ip->get_value());
+}
+

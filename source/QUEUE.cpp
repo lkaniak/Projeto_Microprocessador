@@ -59,38 +59,29 @@ std::string QUEUE::get_instruction()
 	}
 	else 
 	{
-		throw std::runtime_error("invalid queue access!");
+		this->fill();
 	}
 }
 
-void QUEUE::fill(int start_ip)
+void QUEUE::fill()
 {
-	auto ip = start_ip;
-	std::string instr = MEMORY::load_from_address(ip);
+	auto biu_instancia = BIU::get_instancia();
 
 	while (!this->is_full())
 	{
+		std::string instr = biu_instancia->get_address_from_memory_with_ip();
 		this->load(instr);
-		ip++;
+		biu_instancia->increment_ip();
 	}
 }
 
 void QUEUE::clear()
 {
-	auto ip = BIU::get_ip_value();
-	if (!this->is_empty())
+	while (!this->is_empty())
 	{
-		while (!this->is_empty())
-		{
-			this->instructions.pop_back();
-			this->size--;
-		}
+		this->instructions.pop_back();
+		this->size--;
 	}
-	else
-	{
-		fill(ip++);
-	}
-	
 }
 
 
