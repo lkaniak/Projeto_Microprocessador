@@ -218,11 +218,6 @@ Instruction *instruction_Set::get_operation_name(const std::string opcode)
 //////////////////////////////////////
 //  LISTA DE INSTRUCOES COMECA AQUI //
 //////////////////////////////////////
-/*
-void instruction_Set::execute_instruction(instruction_line op)
-{
-
-}*/
 
 void instruction_Set::mov(REGISTER *r1, REGISTER *r2)
 {
@@ -304,15 +299,7 @@ void instruction_Set:: _xor(REGISTER *r1)
 	auto alu = ALU::get_instancia();
 	auto bus = BUS::get_instancia();
 	bus->transfer(r1, alu->get_first());
-	alu->execute(r1, 'x');
-}
-
-void instruction_Set::push(REGISTER *r1)
-{
-}
-
-void instruction_Set::pop(REGISTER *r1)
-{
+	alu->execute(r1, '^');
 }
 
 void instruction_Set::_not(REGISTER *r1)
@@ -323,11 +310,23 @@ void instruction_Set::_not(REGISTER *r1)
 	alu->execute(r1, '~');
 }
 
+void instruction_Set::push(REGISTER *r1)
+{
+}
+
+void instruction_Set::pop(REGISTER *r1)
+{
+}
+
 void instruction_Set::inc(REGISTER *r1)
 {
 	auto alu = ALU::get_instancia();
 	auto bus = BUS::get_instancia();
+
+	auto alu_reg = alu->get_second();
+	alu_reg->set_value(1);
 	bus->transfer(r1, alu->get_first());
+	
 	alu->execute(r1, '+');
 }
 
@@ -335,16 +334,24 @@ void instruction_Set::dec(REGISTER *r1)
 {
 	auto alu = ALU::get_instancia();
 	auto bus = BUS::get_instancia();
+
+	auto alu_reg = alu->get_second();
+	alu_reg->set_value(1);
 	bus->transfer(r1, alu->get_first());
+
 	alu->execute(r1, '-');
 }
 
 void instruction_Set::load(REGISTER *r1)
 {
+	auto eu = EU::get_instancia();
+	this->mov(eu->get_aux(), r1);
 }
 
 void instruction_Set::store(REGISTER *r1)
 {
+	auto eu = EU::get_instancia();
+	this->mov(r1, eu->get_aux());
 }
 
 void instruction_Set::interrupt(REGISTER *r1)
@@ -353,46 +360,84 @@ void instruction_Set::interrupt(REGISTER *r1)
 
 void instruction_Set::jmp(int r1)
 {
+	auto biu = BIU::get_instancia();
+	biu->set_ip_value(r1);
 }
 
 void instruction_Set::jg(int r1)
 {
+	auto flags = FLAGS::get_instancia();
+	if (!flags->get_flag(1) && flags->get_flag(2) == flags->get_flag(3))
+	{
+		this->jmp(r1);
+	}
 }
 
 void instruction_Set::je(int r1)
 {
+	auto flags = FLAGS::get_instancia();
+	if (flags->get_flag(1))
+	{
+		this->jmp(r1);
+	}
 }
 
 void instruction_Set::jne(int r1)
 {
+	auto flags = FLAGS::get_instancia();
+	if (!flags->get_flag(1))
+	{
+		this->jmp(r1);
+	}
 }
 
 void instruction_Set::jl(int r1)
 {
+	auto flags = FLAGS::get_instancia();
+	if (flags->get_flag(3) != flags->get_flag(2))
+	{
+		this->jmp(r1);
+	}
 }
 
 void instruction_Set::jz(int r1)
 {
+	this->je(r1);
 }
 
 void instruction_Set::jnz(int r1)
 {
+	this->jne(r1);
 }
 
 void instruction_Set::ja(int r1)
 {
+	auto flags = FLAGS::get_instancia();
+	if (!flags->get_flag(4) && !flags->get_flag(1))
+	{
+		this->jmp(r1);
+	}
 }
 
 void instruction_Set::jb(int r1)
 {
+	auto flags = FLAGS::get_instancia();
+	if (flags->get_flag(4))
+	{
+		this->jmp(r1);
+	}
 }
 
 void instruction_Set::ret(int r1)
 {
+	auto biu = BIU::get_instancia();
+	biu->set_ip_value(r1);
 }
 
 void instruction_Set::call(int r1)
 {
+	auto biu = BIU::get_instancia();
+	biu->set_ip_value(r1);
 }
 
 void instruction_Set::start()
