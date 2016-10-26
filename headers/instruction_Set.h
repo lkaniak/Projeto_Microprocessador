@@ -20,6 +20,7 @@
 #include "REGISTER.h"
 #include "ALU.h"
 #include "BUS.h"
+#include "EU.h"
 #include "BIU.h"
 
 class instruction_Set

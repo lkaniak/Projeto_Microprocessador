@@ -66,8 +66,3 @@ DECODER::DECODER()
 DECODER::~DECODER()
 {
 }
-
-void DECODER::load()
-{
-
-}

@@ -4,7 +4,6 @@
 
 #include "REGISTER.h"
 #include "MEMORY.h"
-#include "QUEUE.h"
 #include "STACK.h"
 #include "DECODER.h"
 
@@ -18,7 +17,6 @@ private:
 	REGISTER *ip;
 	MEMORY *memory;
 	QUEUE *queue;
-	DECODER *decoder;
 	
 	BIU();
 	~BIU();

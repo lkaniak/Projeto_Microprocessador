@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+
 #include "Instruction.h"
 #include "instruction_Set.h"
 #include "EU.h"
@@ -14,8 +15,6 @@ private:
 	// Numero maximo e atual de instrucoes na fila
 	int limit;
 	int current;
-
-	void load();
 public:
 	DECODER();
 	~DECODER();

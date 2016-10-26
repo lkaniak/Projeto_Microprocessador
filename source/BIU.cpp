@@ -1,4 +1,5 @@
 #include "../headers/BIU.h"
+#include "../headers/QUEUE.h"
 
 BIU *BIU::instancia = nullptr;
 
@@ -16,7 +17,6 @@ BIU::BIU()
 {
 	this->ip = new REGISTER("ip");
 	this->memory = new MEMORY(255);
-	this->decoder = new DECODER();
 	this->queue = new QUEUE();
 }
 
@@ -27,6 +27,7 @@ BIU::~BIU()
 
 bool BIU::execute()
 {
+	auto decoder = new DECODER();
 	auto instruction = queue->get_instruction();
 	auto decoded_instruction = decoder->decode(instruction);
 
@@ -64,10 +65,6 @@ bool BIU::execute()
 	{
 		EU::get_instancia()->process(decoded_instruction[0]);
 	}
-
-	// Incrementa IP em 1
-//	this->increment_ip();
-
 	return false;
 
 }

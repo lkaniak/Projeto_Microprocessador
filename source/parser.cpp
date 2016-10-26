@@ -240,7 +240,7 @@ void Parser::check_sintax(std::ifstream &source_file)
                             }
                         if (!found)
                         {
-                            this->add_symbol(operand_token[1], -1);
+                            this->add_symbol(operand_token[operand_token.size() - 1], -1);
                         }
                     }
                                         
