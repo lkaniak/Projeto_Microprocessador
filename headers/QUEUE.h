@@ -4,6 +4,7 @@
 
 #include "Instruction.h"
 
+
 class QUEUE
 {
 private:
@@ -20,6 +21,6 @@ public:
 	bool is_empty();
 	void load(std::string Instr);
 	std::string get_instruction();	//FIFO
-	void fill();
+	void fill(int start_ip);
 	void clear();
 };

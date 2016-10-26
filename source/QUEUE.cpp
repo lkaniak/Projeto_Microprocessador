@@ -1,5 +1,5 @@
 #include "../headers/QUEUE.h"
-
+#include "../headers/BIU.h"
 
 
 QUEUE::QUEUE() : size(0), max(5)
@@ -63,17 +63,21 @@ std::string QUEUE::get_instruction()
 	}
 }
 
-void QUEUE::fill()
+void QUEUE::fill(int start_ip)
 {
-	//load(instr);
+	auto ip = start_ip;
+	std::string instr = MEMORY::load_from_address(ip);
+
 	while (!this->is_full())
 	{
-		fill();
+		this->load(instr);
+		ip++;
 	}
 }
 
 void QUEUE::clear()
 {
+	auto ip = BIU::get_ip();
 	if (!this->is_empty())
 	{
 		while (!this->is_empty())
@@ -84,7 +88,7 @@ void QUEUE::clear()
 	}
 	else
 	{
-		//throw std::runtime_error("queue already empty.");
+		fill(ip++);
 	}
 	
 }

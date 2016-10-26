@@ -10,7 +10,7 @@
 class BIU
 {
 private:
-	REGISTER *ip;
+	static REGISTER *ip;
 	MEMORY *memory;
 	QUEUE *queue;
 	DECODER *decoder;
@@ -22,6 +22,6 @@ public:
 	bool execute();
 	int increment_ip();
 	int set_ip(int new_ip);
-	int get_ip();
+	static int get_ip();
 };
 
