@@ -55,7 +55,6 @@ std::string QUEUE::get_instruction()
 	{
 		this->fill();
 	}
-	
 	Instr = this->instructions.front();
 	this->instructions.erase(this->instructions.begin());
 	this->size--;
