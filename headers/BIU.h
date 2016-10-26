@@ -1,5 +1,6 @@
 #pragma once
 #include <fstream>
+#include <exception>
 
 #include "REGISTER.h"
 #include "MEMORY.h"
@@ -30,5 +31,6 @@ public:
 	int get_ip_value();
 	void load_file(std::ifstream *file);
 	std::string get_address_from_memory_with_ip();
+	const int get_memory_size_limit();
 };
 

@@ -1,6 +1,6 @@
 #include "..\headers\DECODER.h"
 
-std::vector<Instruction*> DECODER::decode(std::string instruction)
+std::vector<std::string> DECODER::decode(std::string instruction)
 {
 	std::string opcode;
 	auto inst_set = instruction_Set::get_instancia();
@@ -8,7 +8,7 @@ std::vector<Instruction*> DECODER::decode(std::string instruction)
 	Instruction *operator_1_translated = nullptr;
 	Instruction *operator_2_translated = nullptr;
 
-	std::vector<Instruction*> instruction_decoded;
+	std::vector<std::string> instruction_decoded;
 
 	//Pega a instrucao
 	for (auto o : instruction)
@@ -19,33 +19,37 @@ std::vector<Instruction*> DECODER::decode(std::string instruction)
 			instr_translated = inst_set->get_operation_name(opcode);
 			if (instr_translated != nullptr)
 			{
-				instruction_decoded.push_back(instr_translated);
+				instruction_decoded.push_back(instr_translated->get_name());
 				break;
 			}
 		}
 	}
 
-	instruction.erase(0, instr_translated->get_opcode().size());
+	auto new_size = instruction.erase(0, instr_translated->get_opcode().size());
 
 	auto tot_op = instr_translated->get_num_operators();
-	if (tot_op > 0)
+	if (tot_op == 1)
 	{
-		// Pega os registradores
-		opcode = "";
-		for (auto o : instruction)
-		{
-			opcode += o;
-			if (instruction_decoded.size() == 1 && opcode.size() == 2)
-			{
-				instruction_decoded.push_back(inst_set->get_operation_name(opcode));
-				opcode = "";
-			}
-			else if (instruction_decoded.size() == 2 && opcode.size() == 2)
-			{
-				instruction_decoded.push_back(inst_set->get_operation_name(opcode));
+		instruction_decoded.push_back(inst_set->get_operation_name(instruction)->get_name());
+	}
+	else if (tot_op == 2)
+	{
+		// Pega os dois primeiros bits da string
+		opcode = instruction.substr(0, 2);
+		instruction_decoded.push_back(inst_set->get_operation_name(opcode)->get_name());
 
-				break;
-			}
+		// Remove os bits ja utilizados
+		instruction.erase(0, 2);
+		instruction.resize(instruction.find_last_of('\0'));
+		if (instruction.length() == 2)
+		{
+			instruction_decoded.push_back(inst_set->get_operation_name(instruction)->get_name());
+		}
+		else
+		{
+			auto inst_utils = utils::get_instancia();
+			instruction = inst_utils->bin_to_dec(instruction);
+			instruction_decoded.push_back(instruction);
 		}
 	}
 

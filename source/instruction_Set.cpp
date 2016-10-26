@@ -27,6 +27,12 @@ instruction_Set::~instruction_Set()
 {
 }
 
+void instruction_Set::execute_instruction(std::string op, REGISTER * r1, int r2)
+{
+	if (op.compare("MOV") == 0)
+		this->mov(r1, r2);
+}
+
 void instruction_Set::execute_instruction(std::string op, REGISTER * r1, REGISTER * r2)
 {
 	if (op.compare("MOV") == 0)
@@ -69,7 +75,13 @@ void instruction_Set::execute_instruction(std::string op, REGISTER * r1)
 		this->store(r1);
 	else if (op.compare("INT") == 0)
 		this->interrupt(r1);
-	else if (op.compare("JMP") == 0)
+	else
+		throw std::runtime_error("Instruction Not Found");
+}
+
+void instruction_Set::execute_instruction(std::string op, int r1)
+{
+	if (op.compare("JMP") == 0)
 		this->jmp(r1);
 	else if (op.compare("JG") == 0)
 		this->jg(r1);
@@ -194,7 +206,7 @@ Instruction *instruction_Set::get_operation_name(const std::string opcode)
 	// Verifica tabela de registradores
 	for (auto i = 0; i < this->operators.size(); i++)
 	{
-		if (this->operators[i]->get_opcode() == opcode)
+		if (this->operators[i]->get_opcode().compare(opcode) == 0)
 		{
 			return this->operators[i];
 		}
@@ -223,7 +235,8 @@ void instruction_Set::mov(REGISTER *r1, int num)
 {
 	auto alu = ALU::get_instancia();
 	auto bus = BUS::get_instancia();
-	//bus->transfer(r1, num);
+	
+	r1->set_value(num);
 }
 
 void instruction_Set::add(REGISTER *r1, REGISTER *r2)
@@ -338,47 +351,47 @@ void instruction_Set::interrupt(REGISTER *r1)
 {
 }
 
-void instruction_Set::jmp(REGISTER *r1)
+void instruction_Set::jmp(int r1)
 {
 }
 
-void instruction_Set::jg(REGISTER *r1)
+void instruction_Set::jg(int r1)
 {
 }
 
-void instruction_Set::je(REGISTER *r1)
+void instruction_Set::je(int r1)
 {
 }
 
-void instruction_Set::jne(REGISTER *r1)
+void instruction_Set::jne(int r1)
 {
 }
 
-void instruction_Set::jl(REGISTER *r1)
+void instruction_Set::jl(int r1)
 {
 }
 
-void instruction_Set::jz(REGISTER *r1)
+void instruction_Set::jz(int r1)
 {
 }
 
-void instruction_Set::jnz(REGISTER *r1)
+void instruction_Set::jnz(int r1)
 {
 }
 
-void instruction_Set::ja(REGISTER *r1)
+void instruction_Set::ja(int r1)
 {
 }
 
-void instruction_Set::jb(REGISTER *r1)
+void instruction_Set::jb(int r1)
 {
 }
 
-void instruction_Set::ret(REGISTER *r1)
+void instruction_Set::ret(int r1)
 {
 }
 
-void instruction_Set::call(REGISTER *r1)
+void instruction_Set::call(int r1)
 {
 }
 

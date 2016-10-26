@@ -27,6 +27,8 @@ public:
     static utils *get_instancia();
 	void generate_csv(vecPair_StrInt* Symb, std::vector<instruction_line*> * Instr);
     std::vector<std::string> split_line(const std::string &text, const char sep);
+	std::string dec_to_bin(const int dec_num);
+	std::string bin_to_dec(const std::string str_num);
 };
 
 #endif /* UTILS_H */

@@ -55,17 +55,17 @@ private:
     void load(REGISTER * r1);
     void store(REGISTER * r1);
     void interrupt(REGISTER * r1);
-    void jmp(REGISTER * r1);
-    void jg(REGISTER * r1);
-    void je(REGISTER * r1);
-    void jne(REGISTER * r1);
-    void jl(REGISTER * r1);
-    void jz(REGISTER * r1);
-    void jnz(REGISTER * r1);
-    void ja(REGISTER * r1);
-    void jb(REGISTER * r1);
-    void ret(REGISTER * r1);
-    void call(REGISTER * r1);
+    void jmp(int r1);
+    void jg(int r1);
+    void je(int r1);
+    void jne(int r1);
+    void jl(int r1);
+    void jz(int r1);
+    void jnz(int r1);
+    void ja(int r1);
+    void jb(int r1);
+    void ret(int r1);
+    void call(int r1);
 
     // Nenhum operador
     void start();
@@ -77,7 +77,9 @@ public:
     ~instruction_Set();
 
 	void execute_instruction(std::string op, REGISTER * r1, REGISTER * r2);
+	void execute_instruction(std::string op, REGISTER * r1, int r2);
 	void execute_instruction(std::string op, REGISTER * r1);
+	void execute_instruction(std::string op, int r1);
 	void execute_instruction(std::string op);
     //void execute_instruction(instruction_line op);
     Instruction *get_operation_info(const std::string name, int num_operators);

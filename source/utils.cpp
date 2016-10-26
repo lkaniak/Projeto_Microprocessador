@@ -91,3 +91,24 @@ std::vector<std::string> utils::split_line(const std::string &text, const char s
     if (temp != "") tokens.push_back(temp);
     return tokens;
 }
+
+std::string utils::dec_to_bin(const int dec_num)
+{
+	return std::bitset<8>(dec_num).to_string();
+}
+
+std::string utils::bin_to_dec(const std::string str_num)
+{
+	unsigned num = std::stoi(str_num);
+	unsigned res = 0;
+
+	for (int i = 0; num > 0; ++i)
+	{
+		if ((num % 10) == 1)
+			res += (1 << i);
+
+		num /= 10;
+	}
+
+	return std::to_string(res);
+}

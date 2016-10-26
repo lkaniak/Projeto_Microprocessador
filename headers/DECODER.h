@@ -4,6 +4,7 @@
 #include "Instruction.h"
 #include "instruction_Set.h"
 #include "EU.h"
+#include "utils.h"
 
 class DECODER
 {
@@ -18,6 +19,6 @@ private:
 public:
 	DECODER();
 	~DECODER();
-	std::vector<Instruction*> decode(std::string instruction);
+	std::vector<std::string> decode(std::string instruction);
 };
 

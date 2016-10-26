@@ -14,6 +14,7 @@
 
 #include "headers/utils.h"
 #include "headers/BIU.h"
+#include "headers/EU.h"
 
 void build(std::vector<std::string> commands, int size)
 {
@@ -53,6 +54,9 @@ void run(std::vector<std::string> commands, int size)
 		{
 			end = biu->execute();
 		}
+		auto inst_eu = EU::get_instancia()->get_main_registers();
+		std::cout << "FIM";
+
 	}
 	catch (std::exception &e)
 	{

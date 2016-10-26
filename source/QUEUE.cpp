@@ -51,17 +51,14 @@ void QUEUE::load(std::string Instr)
 std::string QUEUE::get_instruction()
 {
 	std::string Instr;
-	if (!this->is_empty())
-	{
-		Instr = this->instructions.front();
-		this->instructions.erase(this->instructions.begin());
-		this->size--;
-	}
-	else 
+	if (this->is_empty())
 	{
 		this->fill();
-		Instr = this->get_instruction();
 	}
+	
+	Instr = this->instructions.front();
+	this->instructions.erase(this->instructions.begin());
+	this->size--;
 
 	return Instr;
 }
@@ -70,7 +67,7 @@ void QUEUE::fill()
 {
 	auto biu_instancia = BIU::get_instancia();
 
-	while (!this->is_full())
+	while (!this->is_full() && biu_instancia->get_ip_value() < biu_instancia->get_memory_size_limit())
 	{
 		std::string instr = biu_instancia->get_address_from_memory_with_ip();
 		this->load(instr);

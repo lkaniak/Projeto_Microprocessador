@@ -44,7 +44,7 @@ private:
     
     Parser();    
     
-    std::string dec_to_bin(const int);
+    std::string dec_to_bin(const int dec_num);
 	//modificacao
     std::string get_instruction_opcode(const std::string op, int n_operators);
     std::string get_symbol_opcode(const std::string op);

@@ -5,6 +5,7 @@
 
 #include "REGISTER.h"
 #include "instruction_Set.h"
+#include "BUS.h"
 
 class EU
 {
@@ -19,9 +20,14 @@ public:
 	static EU* get_instancia();
 
 	void process(std::string op, std::string reg_1, std::string reg_2);
+	void process(std::string op, std::string reg_1, int reg_2);
 	void process(std::string op, std::string reg_1);
+	void process(std::string op, int reg_1);
 	void process(std::string op);
 
 	REGISTER *get_aux();
+
+	// TESTE REMOVER
+	std::vector<REGISTER*> get_main_registers(){ return main_registers; };
 };
 

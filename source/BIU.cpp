@@ -30,26 +30,43 @@ bool BIU::execute()
 	auto instruction = queue->get_instruction();
 	auto decoded_instruction = decoder->decode(instruction);
 
-	if (decoded_instruction[0]->get_name().compare("END") == 0)
+	if (decoded_instruction[0].compare("END") == 0)
 		return true;
 	else if (decoded_instruction.size() == 3)
 	{
-		EU::get_instancia()->process(decoded_instruction[0]->get_name(),
-			decoded_instruction[1]->get_name(),
-			decoded_instruction[2]->get_name());
+		try
+		{			
+			EU::get_instancia()->process(decoded_instruction[0],
+				decoded_instruction[1],
+				std::stoi(decoded_instruction[2]));
+		}
+		catch (std::exception)
+		{
+			EU::get_instancia()->process(decoded_instruction[0],
+				decoded_instruction[1],
+				decoded_instruction[2]);
+		}
 	}
 	else if (decoded_instruction.size() == 2)
 	{
-		EU::get_instancia()->process(decoded_instruction[0]->get_name(),
-			decoded_instruction[1]->get_name());
+		try
+		{
+			/*EU::get_instancia()->process(decoded_instruction[0],
+				std::stoi(decoded_instruction[1]));*/
+		}
+		catch (std::exception)
+		{
+			EU::get_instancia()->process(decoded_instruction[0],
+				decoded_instruction[1]);
+		}
 	}
 	else
 	{
-		EU::get_instancia()->process(decoded_instruction[0]->get_name());
+		EU::get_instancia()->process(decoded_instruction[0]);
 	}
 
 	// Incrementa IP em 1
-	this->increment_ip();
+//	this->increment_ip();
 
 	return false;
 
@@ -81,5 +98,10 @@ void BIU::load_file(std::ifstream * file)
 std::string BIU::get_address_from_memory_with_ip()
 {
 	return memory->load_from_address(this->ip->get_value());
+}
+
+const int BIU::get_memory_size_limit()
+{
+	return this->memory->get_size_limit() - 1;
 }
 

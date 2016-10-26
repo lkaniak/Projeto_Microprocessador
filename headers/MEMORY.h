@@ -16,5 +16,7 @@ public:
 	bool save_to_address(int add);
 	std::string load_from_address(int add);
 	void load_file(std::ifstream *binary_file);
+
+	const int get_size_limit();
 };
 
