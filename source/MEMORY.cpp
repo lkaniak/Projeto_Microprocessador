@@ -53,5 +53,5 @@ void MEMORY::load_file(std::ifstream *binary_file)
 
 const int MEMORY::get_size_limit()
 {
-	return this->size_limit;
+	return this->memory.size();
 }

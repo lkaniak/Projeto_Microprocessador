@@ -260,7 +260,7 @@ void Parser::check_sintax(std::ifstream &source_file)
             }
         }
     }
-    //this->instruction_table.pop_back();
+
     // Pega as constantes no final do arquivo
     while (!source_file.eof())
     {

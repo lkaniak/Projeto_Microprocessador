@@ -13,6 +13,8 @@ EU::EU()
 	this->main_registers.push_back(new REGISTER("RB"));
 	this->main_registers.push_back(new REGISTER("RC"));
 	this->main_registers.push_back(new REGISTER("RD"));
+
+	this->aux = new REGISTER("AUX");
 }
 
 
@@ -57,7 +59,6 @@ void EU::process(std::string op, std::string reg_1, std::string reg_2)
 void EU::process(std::string op, std::string reg_1, int reg_2)
 {
 	REGISTER* r1 = nullptr;
-	int r2 = reg_2;
 	for (auto it = this->main_registers.cbegin(); it != this->main_registers.cend(); ++it)
 	{
 		if ((*it)->get_name().compare(reg_1) == 0)
@@ -67,7 +68,7 @@ void EU::process(std::string op, std::string reg_1, int reg_2)
 		}
 	}
 
-	instruction_Set::get_instancia()->execute_instruction(op, r1, r2);
+	instruction_Set::get_instancia()->execute_instruction(op, r1, reg_2);
 }
 
 void EU::process(std::string op, std::string reg_1)
@@ -83,6 +84,11 @@ void EU::process(std::string op, std::string reg_1)
 	}
 
 	instruction_Set::get_instancia()->execute_instruction(op, r1);
+}
+
+void EU::process(std::string op, int reg_1)
+{
+	instruction_Set::get_instancia()->execute_instruction(op, reg_1);
 }
 
 void EU::process(std::string op)

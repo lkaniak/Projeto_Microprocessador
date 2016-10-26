@@ -361,7 +361,7 @@ void instruction_Set::interrupt(REGISTER *r1)
 void instruction_Set::jmp(int r1)
 {
 	auto biu = BIU::get_instancia();
-	biu->set_ip_value(r1);
+	biu->set_ip_value(r1 - 1);
 }
 
 void instruction_Set::jg(int r1)

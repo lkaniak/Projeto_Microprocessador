@@ -25,12 +25,22 @@ std::vector<std::string> DECODER::decode(std::string instruction)
 		}
 	}
 
-	auto new_size = instruction.erase(0, instr_translated->get_opcode().size());
+	instruction.erase(0, instr_translated->get_opcode().size());
+	instruction.resize(instruction.find_last_of('\0'));
 
 	auto tot_op = instr_translated->get_num_operators();
 	if (tot_op == 1)
 	{
-		instruction_decoded.push_back(inst_set->get_operation_name(instruction)->get_name());
+		if (instruction.length() == 2)
+		{
+			instruction_decoded.push_back(inst_set->get_operation_name(instruction)->get_name());
+		}
+		else
+		{
+			auto inst_utils = utils::get_instancia();
+			instruction = inst_utils->bin_to_dec(instruction);
+			instruction_decoded.push_back(instruction);
+		}
 	}
 	else if (tot_op == 2)
 	{
@@ -40,7 +50,7 @@ std::vector<std::string> DECODER::decode(std::string instruction)
 
 		// Remove os bits ja utilizados
 		instruction.erase(0, 2);
-		instruction.resize(instruction.find_last_of('\0'));
+		
 		if (instruction.length() == 2)
 		{
 			instruction_decoded.push_back(inst_set->get_operation_name(instruction)->get_name());

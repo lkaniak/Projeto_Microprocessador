@@ -52,8 +52,8 @@ bool BIU::execute()
 	{
 		try
 		{
-			/*EU::get_instancia()->process(decoded_instruction[0],
-				std::stoi(decoded_instruction[1]));*/
+			EU::get_instancia()->process(decoded_instruction[0],
+				std::stoi(decoded_instruction[1]));
 		}
 		catch (std::exception)
 		{
