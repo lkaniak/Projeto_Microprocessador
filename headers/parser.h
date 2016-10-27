@@ -42,7 +42,7 @@ private:
     // Vetor de OpCodes
     std::string binary_code;
     
-    Parser();    
+    Parser();
     
     std::string dec_to_bin(const int dec_num);
 	//modificacao
@@ -62,7 +62,7 @@ public:
     static Parser *get_instancia();
     std::string make_object(std::ifstream &source_file, std::string output_file);
 	std::vector<instruction_line*> get_intruction_table();
-	vecPair_StrInt get_symbol_table();
+    vecPair_StrInt get_symbol_table();
     ~Parser();
 };
 

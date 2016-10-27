@@ -55,7 +55,7 @@ void run(std::vector<std::string> commands, int size)
 			end = biu->execute();
 		}
 		auto inst_eu = EU::get_instancia()->get_main_registers();
-		std::cout << "FIM";
+		std::cout << "FIM\n";
 
 	}
 	catch (std::exception &e)

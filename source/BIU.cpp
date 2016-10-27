@@ -99,6 +99,11 @@ std::string BIU::get_address_from_memory_with_ip()
 
 const int BIU::get_memory_size_limit()
 {
-	return this->memory->get_size_limit() - 1;
+    return this->memory->get_size_limit() - 1;
+}
+
+std::vector<std::string> *BIU::get_memory()
+{
+    return this->memory->get_memory();
 }
 

@@ -27,7 +27,6 @@ public:
 
 	REGISTER *get_aux();
 
-	// TESTE REMOVER
-	std::vector<REGISTER*> get_main_registers(){ return main_registers; };
+    std::vector<REGISTER*> get_main_registers(){ return main_registers; }
 };
 

@@ -26,7 +26,6 @@ std::vector<std::string> DECODER::decode(std::string instruction)
 	}
 
 	instruction.erase(0, instr_translated->get_opcode().size());
-	instruction.resize(instruction.find_last_of('\0'));
 
 	auto tot_op = instr_translated->get_num_operators();
 	if (tot_op == 1)

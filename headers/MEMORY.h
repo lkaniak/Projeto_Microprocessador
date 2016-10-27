@@ -18,5 +18,7 @@ public:
 	void load_file(std::ifstream *binary_file);
 
 	const int get_size_limit();
+
+    std::vector<std::string> *get_memory();
 };
 

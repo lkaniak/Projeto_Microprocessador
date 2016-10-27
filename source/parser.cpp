@@ -6,6 +6,7 @@
  */
 
 #include "./../headers/parser.h"
+
 Parser *Parser::instancia = nullptr;
 
 Parser *Parser::get_instancia()
@@ -14,7 +15,7 @@ Parser *Parser::get_instancia()
     {
         instancia = new Parser();
     }
-    
+
     return instancia;
 }
 

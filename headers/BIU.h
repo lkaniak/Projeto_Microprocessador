@@ -30,5 +30,7 @@ public:
 	void load_file(std::ifstream *file);
 	std::string get_address_from_memory_with_ip();
 	const int get_memory_size_limit();
+
+    std::vector<std::string> *get_memory();
 };
 

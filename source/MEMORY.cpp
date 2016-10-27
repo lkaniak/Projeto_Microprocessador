@@ -30,10 +30,12 @@ void MEMORY::load_file(std::ifstream *binary_file)
 			instr += line;
 			// Se for unico jmp que nao tem como distinguir com 4 bits
 			if (instr.find("110000") != 0)
-				instr[8] = '\0';
+                instr.resize(8);
+                //instr[8] = '\0';
 			else
 			{
 				binary_file->read(line, 6);
+                instr.resize(14);
 				instr[14] = '\0';
 			}
 
@@ -44,7 +46,8 @@ void MEMORY::load_file(std::ifstream *binary_file)
 		{
 			binary_file->read(line, 10);
 			instr += line;
-			instr[14] = '\0';
+            instr.resize(14);
+            //instr[14] = '\0';
 
 			this->memory.push_back(instr);
 		}
@@ -53,5 +56,10 @@ void MEMORY::load_file(std::ifstream *binary_file)
 
 const int MEMORY::get_size_limit()
 {
-	return this->memory.size();
+    return this->memory.size();
+}
+
+std::vector<std::string> *MEMORY::get_memory()
+{
+    return &this->memory;
 }
