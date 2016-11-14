@@ -1,5 +1,10 @@
 #include "..\headers\MEMORY.h"
 
+MEMORY::MEMORY()
+{
+	this->size_limit = 40;
+}
+
 MEMORY::MEMORY(int size)
 	:size_limit(size)
 {
@@ -63,3 +68,62 @@ std::vector<std::string> *MEMORY::get_memory()
 {
     return &this->memory;
 }
+
+cache::cache()
+{
+	this->size_limit = 4;
+	this->tag = new int[4];
+	this->memory = new std::string[4];
+}
+
+cache::cache(int size)
+{
+	this->size_limit = size;
+	this->tag = new int[size];
+	this->memory = new std::string[size];
+}
+
+bool cache::cache_hit(int address)
+{
+	for (int i = 0; i < this->size_limit; i++)
+	{
+		if (address == this->tag[i])
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+int cache::mapping(int address)
+{
+	return address % this->size_limit;
+}
+
+void cache::save_to_cache(int address)
+{
+	std::vector<std::string>* MP = get_memory();
+	this->memory[mapping(address)] = MP->at(address);
+	this->tag[mapping(address)] = address;
+}
+
+std::string cache::load_from_cache(int address)
+{
+	if (cache_hit(address))
+	{
+		return this->memory[mapping(address)];
+	}
+	else
+	{
+		return load_from_address(address);
+	}
+}
+
+std::pair<int*, std::string*> cache::get_cache()
+{
+	std::pair<int*, std::string*> cache;
+	cache.first = this->tag;
+	cache.second = this->memory;
+	return cache;
+}
+
