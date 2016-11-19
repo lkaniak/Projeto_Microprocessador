@@ -1,17 +1,33 @@
 #include "..\headers\MEMORY.h"
 
+
 MEMORY::MEMORY()
 {
 	this->size_limit = 40;
+	this->memory.resize(this->size_limit);
 }
 
 MEMORY::MEMORY(int size)
-	:size_limit(size)
 {
+	this->size_limit = size;
+	this->memory.resize(this->size_limit);
 }
 
 MEMORY::~MEMORY()
 {
+}
+
+bool MEMORY::save_to_address(int add, std::string data)
+{
+	if (add >= this->size_limit || add < 0)
+		return false;
+	else
+	{
+		this->memory[add] = data;
+		return true;
+	}
+
+	return false;
 }
 
 std::string MEMORY::load_from_address(int add)
@@ -35,12 +51,12 @@ void MEMORY::load_file(std::ifstream *binary_file)
 			instr += line;
 			// Se for unico jmp que nao tem como distinguir com 4 bits
 			if (instr.find("110000") != 0)
-                instr.resize(8);
-                //instr[8] = '\0';
+				instr.resize(8);
+			//instr[8] = '\0';
 			else
 			{
 				binary_file->read(line, 6);
-                instr.resize(14);
+				instr.resize(14);
 				instr[14] = '\0';
 			}
 
@@ -51,8 +67,8 @@ void MEMORY::load_file(std::ifstream *binary_file)
 		{
 			binary_file->read(line, 10);
 			instr += line;
-            instr.resize(14);
-            //instr[14] = '\0';
+			instr.resize(14);
+			//instr[14] = '\0';
 
 			this->memory.push_back(instr);
 		}
@@ -61,12 +77,12 @@ void MEMORY::load_file(std::ifstream *binary_file)
 
 const int MEMORY::get_size_limit()
 {
-    return this->memory.size();
+	return this->memory.size();
 }
 
 std::vector<std::string> *MEMORY::get_memory()
 {
-    return &this->memory;
+	return &this->memory;
 }
 
 cache::cache()
@@ -100,14 +116,17 @@ int cache::mapping(int address)
 	return address % this->size_limit;
 }
 
-void cache::save_to_cache(int address)
+
+
+void cache::save_to_cache(int address, std::vector<std::string>* MP)
 {
-	std::vector<std::string>* MP = get_memory();
-	this->memory[mapping(address)] = MP->at(address);
-	this->tag[mapping(address)] = address;
+	std::string data = MP->at(address);
+	int mapped_address = mapping(address);
+	this->memory[mapped_address] = data;
+	this->tag[mapped_address] = address;
 }
 
-std::string cache::load_from_cache(int address)
+std::string cache::load_from_cache(int address, MEMORY* MP)
 {
 	if (cache_hit(address))
 	{
@@ -115,7 +134,7 @@ std::string cache::load_from_cache(int address)
 	}
 	else
 	{
-		return load_from_address(address);
+		return MP->load_from_address(address);
 	}
 }
 
